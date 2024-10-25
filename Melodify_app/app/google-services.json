@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:564008894147:android:4417a50a350fba9980ac76",
         "android_client_info": {
-          "package_name": "mobile.app"
+          "package_name": "com.example.melodify_app"
         }
       },
       "oauth_client": [],
