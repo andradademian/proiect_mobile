@@ -18,5 +18,40 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.879"
             tools:layout_editor_absoluteX="35dp" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="418dp"
+            android:layout_height="236dp"
+            android:src="@drawable/ic_launcher_foreground"
+            tools:layout_editor_absoluteX="-4dp"
+            tools:layout_editor_absoluteY="-1dp" />
+
+        <EditText
+            android:id="@+id/editTextTextEmailAddress"
+            android:layout_width="329dp"
+            android:layout_height="46dp"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            tools:layout_editor_absoluteX="37dp"
+            tools:layout_editor_absoluteY="393dp" />
+
+        <EditText
+            android:id="@+id/editTextTextPassword"
+            android:layout_width="332dp"
+            android:layout_height="43dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            tools:layout_editor_absoluteX="37dp"
+            tools:layout_editor_absoluteY="486dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="327dp"
+            android:layout_height="48dp"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="35dp"
+            tools:layout_editor_absoluteY="273dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
