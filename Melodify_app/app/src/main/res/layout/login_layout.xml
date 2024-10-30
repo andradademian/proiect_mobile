@@ -8,6 +8,7 @@
     android:layout_gravity="center"
     tools:context=".SignInActivity">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,7 +21,8 @@
             android:layout_margin="30dp"
             app:cardCornerRadius="30dp"
             app:cardElevation="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2">
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            android:backgroundTint="#eb6c6c">
 
             <LinearLayout
                 android:layout_height="wrap_content"
@@ -39,6 +41,7 @@
                 android:textSize="36dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
+                android:textColor="#e2c2c2"
                 app:layout_constraintBottom_toTopOf="@+id/login_adress" />
 
             <EditText
@@ -54,7 +57,7 @@
                 android:ems="10"
                 android:textColor="@color/black"
 
-                android:background="@drawable/common_google_signin_btn_icon_light_normal"
+                android:background="#ef9f9f"
                 />
 
                 <EditText
@@ -70,7 +73,7 @@
                     android:padding="8dp"
                     android:textColor="@color/black"
 
-                    android:background="@drawable/common_google_signin_btn_icon_light_normal"
+                    android:background="#ef9f9f"
 
                     />
 
@@ -82,6 +85,7 @@
                     android:textSize="18sp"
                     android:layout_marginTop="30dp"
                     app:cornerRadius="20dp"
+                    android:background="#e2c2c2"
                     />
             </LinearLayout>
 
@@ -89,14 +93,18 @@
 
 
 
-
-
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/start_photo"
+            android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="418dp"
+            android:layout_width="300dp"
             android:layout_height="236dp"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src="@drawable/app_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
