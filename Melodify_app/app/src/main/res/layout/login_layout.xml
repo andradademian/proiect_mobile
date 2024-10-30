@@ -8,50 +8,76 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+<!--
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@color/common_google_signin_btn_text_light_default"/>
+ -->
+
 
         <Button
             android:id="@+id/button3"
             android:layout_width="340dp"
             android:layout_height="68dp"
-            android:text="Button"
+            android:text="Login"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.879"
-            tools:layout_editor_absoluteX="35dp" />
+            app:layout_constraintVertical_bias="0.879" />
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="418dp"
             android:layout_height="236dp"
             android:src="@drawable/ic_launcher_foreground"
-            tools:layout_editor_absoluteX="-4dp"
-            tools:layout_editor_absoluteY="-1dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <EditText
-            android:id="@+id/editTextTextEmailAddress"
-            android:layout_width="329dp"
-            android:layout_height="46dp"
+            android:id="@+id/login_adress"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="176dp"
+            android:background="@drawable/common_google_signin_btn_text_light"
             android:ems="10"
+            android:hint="Email"
             android:inputType="textEmailAddress"
-            tools:layout_editor_absoluteX="37dp"
-            tools:layout_editor_absoluteY="393dp" />
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/button3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/editTextTextPassword"
-            android:layout_width="332dp"
-            android:layout_height="43dp"
+            android:id="@+id/loin_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
             android:ems="10"
+            android:hint="Password"
+            android:background="@drawable/common_full_open_on_phone"
             android:inputType="textPassword"
-            tools:layout_editor_absoluteX="37dp"
-            tools:layout_editor_absoluteY="486dp" />
+            app:layout_constraintBottom_toTopOf="@+id/button3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_adress"
+            app:layout_constraintVertical_bias="0.136" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="327dp"
             android:layout_height="48dp"
             android:text="TextView"
-            tools:layout_editor_absoluteX="35dp"
-            tools:layout_editor_absoluteY="273dp" />
+            app:layout_constraintBottom_toTopOf="@+id/login_adress"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            app:layout_constraintVertical_bias="0.284"
+            tools:layout_editor_absoluteX="35dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
