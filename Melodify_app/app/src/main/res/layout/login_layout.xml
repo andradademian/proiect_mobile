@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    tools:context=".SignInActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,43 +20,77 @@
             android:layout_margin="30dp"
             app:cardCornerRadius="30dp"
             app:cardElevation="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:background="@color/common_google_signin_btn_text_light_default"/>
+                android:background="@color/common_google_signin_btn_text_light_default"
+                android:layout_gravity="center_horizontal"
+                android:padding="24dp"
+                >
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Login to your account!"
+                android:textSize="36dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/login_adress" />
+
+            <EditText
+                android:id="@+id/login_adress"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="40dp"
+                android:padding="8dp"
+                android:drawablePadding="8dp"
+                android:ems="10"
+                android:textColor="@color/black"
+
+                android:background="@drawable/common_google_signin_btn_icon_light_normal"
+                />
+
+                <EditText
+                    android:id="@+id/loin_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+
+                    android:layout_marginTop="40dp"
+                    android:drawablePadding="8dp"
+                    android:ems="10"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="8dp"
+                    android:textColor="@color/black"
+
+                    android:background="@drawable/common_google_signin_btn_icon_light_normal"
+
+                    />
+
+                <Button
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Login"
+                    android:textSize="18sp"
+                    android:layout_marginTop="30dp"
+                    app:cornerRadius="20dp"
+                    />
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="327dp"
-            android:layout_height="48dp"
-            android:text="Login to your account!"
-            app:layout_constraintBottom_toTopOf="@+id/login_adress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"
-            app:layout_constraintVertical_bias="0.284" />
 
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="340dp"
-            android:layout_height="68dp"
-            android:text="Login"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.879" />
+
 
         <ImageView
             android:id="@+id/imageView2"
@@ -66,35 +103,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/login_adress"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="184dp"
-            android:background="@drawable/common_google_signin_btn_text_light"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/button3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/loin_password"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/common_full_open_on_phone"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/button3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_adress"
-            app:layout_constraintVertical_bias="0.136" />
 
 
 
