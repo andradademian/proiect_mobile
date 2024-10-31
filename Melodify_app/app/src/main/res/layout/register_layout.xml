@@ -19,7 +19,6 @@ tools:context=".SignUpActivity">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         android:backgroundTint="#eb6c6c">
@@ -116,7 +115,6 @@ tools:context=".SignUpActivity">
                 android:text="Create account"
                 android:textSize="18sp"
                 android:layout_marginTop="30dp"
-                app:cornerRadius="20dp"
                 android:background="#e2c2c2"
                 />
         </LinearLayout>

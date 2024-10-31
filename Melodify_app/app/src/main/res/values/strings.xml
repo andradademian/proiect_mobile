@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Melodify_app</string>
+    <string name="access_song">Access Song</string>
 </resources>
