@@ -1,19 +1,24 @@
 package com.example.melodify_app;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.firebase.Firebase;
+import com.google.firebase.ktx.Firebase;
+
+import java.lang.ref.Reference;
 
 public class SignUpActivity extends Activity {
     EditText signup_name, signup_email, signup_password, signup_birth;
     TextView loginRedirection; // TODO adaugat in xml
     Button signup_button;
-    Firebase database; // TODO schimbat in FirebaseDatabase??
+//    Firebase database;
+//    Reference reference;
+//    FirebaseDatabase database; // TODO schimbat in FirebaseDatabase??
 //    DatabaseReference reference;
 
     @Override
