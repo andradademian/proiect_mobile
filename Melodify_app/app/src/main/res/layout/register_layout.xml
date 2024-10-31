@@ -6,7 +6,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
 android:layout_gravity="center"
-tools:context=".SignInActivity">
+tools:context=".SignUpActivity">
 
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +45,7 @@ tools:context=".SignInActivity">
                 app:layout_constraintBottom_toTopOf="@+id/login_adress" />
 
             <EditText
-                android:id="@+id/user_name"
+                android:id="@+id/signup_name"
                 android:hint="Name"
                 android:inputType="textAutoComplete"
 
@@ -61,7 +61,7 @@ tools:context=".SignInActivity">
                 />
 
             <EditText
-                android:id="@+id/login_adress"
+                android:id="@+id/signup_email"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
 
@@ -77,7 +77,7 @@ tools:context=".SignInActivity">
                 />
 
             <EditText
-                android:id="@+id/loin_password"
+                android:id="@+id/signup_password"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
 
@@ -94,7 +94,7 @@ tools:context=".SignInActivity">
                 />
 
             <EditText
-                android:id="@+id/user_birth"
+                android:id="@+id/signup_birth"
                 android:hint="Date of birth"
                 android:inputType="date"
 
@@ -110,7 +110,7 @@ tools:context=".SignInActivity">
                 />
 
             <Button
-                android:id="@+id/submit_button"
+                android:id="@+id/signup_button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Create account"
