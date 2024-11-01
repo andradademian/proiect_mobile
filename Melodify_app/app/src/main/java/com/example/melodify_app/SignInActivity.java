@@ -1,15 +1,10 @@
 package com.example.melodify_app;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,44 +14,33 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.ktx.Firebase;
 
-import java.lang.ref.Reference;
-
-public class SignUpActivity extends Activity {
-    EditText signup_name, signup_email, signup_password, signup_birth;
-    TextView loginRedirection; // TODO adaugat in xml
-    Button signup_button;
+public class SignInActivity extends Activity {
+    EditText login_adress, login_password;
+    Button loin_button;
     FirebaseAuth fb_auth;
-//    Firebase database;
-//    Reference reference;
-//    FirebaseDatabase database; // TODO schimbat in FirebaseDatabase??
-//    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_layout);
+        setContentView(R.layout.login_layout);
 
         fb_auth = FirebaseAuth.getInstance();
 
-        signup_name = findViewById(R.id.signup_name);
-        signup_email = findViewById(R.id.signup_email);
-        signup_password = findViewById(R.id.signup_password);
-        signup_birth = findViewById(R.id.signup_birth);
-//        loginRedirection=findViewById(R.id.redirect_login)
+        login_adress = findViewById(R.id.login_adress);
+        login_password = findViewById(R.id.login_password);
 
-        signup_button.setOnClickListener(new View.OnClickListener() {
+
+        loin_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                database = Firebase.getInstance();
 //                reference= database.getReference("users");
 
-                String name = signup_name.getText().toString();
-                String email = signup_email.getText().toString();
-                String password = signup_password.getText().toString();
-                String birth = signup_birth.getText().toString();
+                String email = login_adress.getText().toString();
+                String password = login_password.getText().toString();
+
 
                 //din documentatie de la firebase
                 fb_auth.createUserWithEmailAndPassword(email, password)
@@ -66,16 +50,16 @@ public class SignUpActivity extends Activity {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
 //                                    Log.d(TAG, "createUserWithEmail:success");
-//                                    FirebaseUser user = fb_auth.getCurrentUser();
+                                    FirebaseUser user = fb_auth.getCurrentUser();
 //                                    updateUI(user);
 
-                                    Toast.makeText(SignUpActivity.this, "Account created successfully!",
+                                    Toast.makeText(SignInActivity.this, "Welcome!",
                                             Toast.LENGTH_SHORT).show();
 
                                 } else {
                                     // If sign in fails, display a message to the user.
 //                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(SignUpActivity.this, "Account creation failed.",
+                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
 //                                    updateUI(null);
                                 }
