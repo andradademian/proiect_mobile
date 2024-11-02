@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends Activity {
     EditText login_adress, login_password;
-    Button loin_button;
+    Button login_button;
     TextView redirect_register;
     FirebaseAuth fb_auth;
 
@@ -29,7 +29,7 @@ public class SignInActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
 
-        fb_auth = FirebaseAuth.getInstance();
+//        fb_auth = FirebaseAuth.getInstance();
 
         login_adress = findViewById(R.id.login_adress);
         login_password = findViewById(R.id.login_password);
@@ -44,43 +44,41 @@ public class SignInActivity extends Activity {
             }
         });
 
-        loin_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                database = Firebase.getInstance();
-//                reference= database.getReference("users");
-
-                String email = login_adress.getText().toString();
-                String password = login_password.getText().toString();
-
-
-
-                //din documentatie de la firebase
-                fb_auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-//                                    Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = fb_auth.getCurrentUser();
-//                                    updateUI(user);
-
-                                    Toast.makeText(SignInActivity.this, "Welcome!",
-                                            Toast.LENGTH_SHORT).show();
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-//                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-//                                    updateUI(null);
-                                }
-                            }
-                        });
-
-            };
-
-        });
+//        login_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                database = Firebase.getInstance();
+////                reference= database.getReference("users");
+//
+//                String email = login_adress.getText().toString();
+//                String password = login_password.getText().toString();
+//
+//                //din documentatie de la firebase
+//                fb_auth.createUserWithEmailAndPassword(email, password)
+//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                if (task.isSuccessful()) {
+//                                    // Sign in success, update UI with the signed-in user's information
+////                                    Log.d(TAG, "createUserWithEmail:success");
+//                                    FirebaseUser user = fb_auth.getCurrentUser();
+////                                    updateUI(user);
+//
+//                                    Toast.makeText(SignInActivity.this, "Welcome!",
+//                                            Toast.LENGTH_SHORT).show();
+//
+//                                } else {
+//                                    // If sign in fails, display a message to the user.
+////                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+//                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
+//                                            Toast.LENGTH_SHORT).show();
+////                                    updateUI(null);
+//                                }
+//                            }
+//                        });
+//
+//            };
+//
+//        });
     }
 }
