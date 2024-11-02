@@ -3,6 +3,7 @@ package com.example.melodify_app;
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,8 @@ public class SignUpActivity extends Activity {
     EditText signup_name, signup_email, signup_password, signup_birth;
     TextView loginRedirection; // TODO adaugat in xml
     Button signup_button;
+    TextView redirect_login;
+
     FirebaseAuth fb_auth;
 //    Firebase database;
 //    Reference reference;
@@ -45,7 +48,17 @@ public class SignUpActivity extends Activity {
         signup_email = findViewById(R.id.signup_email);
         signup_password = findViewById(R.id.signup_password);
         signup_birth = findViewById(R.id.signup_birth);
-//        loginRedirection=findViewById(R.id.redirect_login)
+
+        redirect_login=findViewById(R.id.redirect_login);
+
+        redirect_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(), SignInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         signup_button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -117,6 +117,17 @@ tools:context=".SignUpActivity">
                 android:layout_marginTop="30dp"
                 android:background="#e2c2c2"
                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:id="@+id/redirect_login"
+                android:text="Already have an account? Click here to login!"
+                android:textColor="#e2c2c2"
+                />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

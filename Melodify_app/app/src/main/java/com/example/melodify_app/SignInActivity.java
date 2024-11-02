@@ -1,10 +1,12 @@
 package com.example.melodify_app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignInActivity extends Activity {
     EditText login_adress, login_password;
     Button loin_button;
+    TextView redirect_register;
     FirebaseAuth fb_auth;
 
     @Override
@@ -30,7 +33,16 @@ public class SignInActivity extends Activity {
 
         login_adress = findViewById(R.id.login_adress);
         login_password = findViewById(R.id.login_password);
+        redirect_register=findViewById(R.id.redirect_register);
 
+        redirect_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         loin_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +52,7 @@ public class SignInActivity extends Activity {
 
                 String email = login_adress.getText().toString();
                 String password = login_password.getText().toString();
+
 
 
                 //din documentatie de la firebase
