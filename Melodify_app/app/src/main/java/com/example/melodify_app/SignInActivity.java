@@ -29,7 +29,7 @@ public class SignInActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
 
-//        fb_auth = FirebaseAuth.getInstance();
+        fb_auth = FirebaseAuth.getInstance();
 
         login_adress = findViewById(R.id.login_adress);
         login_password = findViewById(R.id.login_password);
@@ -47,9 +47,8 @@ public class SignInActivity extends Activity {
 //        login_button.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-////                database = Firebase.getInstance();
-////                reference= database.getReference("users");
 //
+//                String email=String.valueOf(login_adress.getText());
 //                String email = login_adress.getText().toString();
 //                String password = login_password.getText().toString();
 //
