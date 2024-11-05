@@ -1,13 +1,19 @@
 package com.example.melodify_app;
 
-public class Helper {
+public class User {
 
     String name, email, password, birthday;
-    public Helper(String name, String email, String password, String birthday) {
+    public User(String name, String email, String password, String birthday) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.birthday = birthday;
+    }
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
 

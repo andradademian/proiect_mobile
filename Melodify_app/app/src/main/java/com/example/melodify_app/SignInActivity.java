@@ -3,6 +3,7 @@ package com.example.melodify_app;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +17,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class SignInActivity extends Activity {
     EditText login_adress, login_password;
     Button login_button;
     TextView redirect_register;
-    FirebaseAuth fb_auth;
+//    FirebaseAuth fb_auth;
+    FirebaseFirestore db;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +36,9 @@ public class SignInActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
 
-        fb_auth = FirebaseAuth.getInstance();
+//        fb_auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
 
         login_adress = findViewById(R.id.login_adress);
         login_password = findViewById(R.id.login_password);
@@ -54,29 +63,44 @@ public class SignInActivity extends Activity {
                 String email = login_adress.getText().toString();
                 String password = login_password.getText().toString();
 
-                //din documentatie de la firebase
-                fb_auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                db.collection("users")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-//                                    Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = fb_auth.getCurrentUser();
-//                                    updateUI(user);
-
-                                    Toast.makeText(SignInActivity.this, "Welcome!",
-                                            Toast.LENGTH_SHORT).show();
-
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                    }
                                 } else {
-                                    // If sign in fails, display a message to the user.
-//                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-//                                    updateUI(null);
+//                                    Log.w(TAG, "Error getting documents.", task.getException());
                                 }
                             }
                         });
+
+                //din documentatie de la firebase
+//                fb_auth.createUserWithEmailAndPassword(email, password)
+//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                if (task.isSuccessful()) {
+//                                    // Sign in success, update UI with the signed-in user's information
+////                                    Log.d(TAG, "createUserWithEmail:success");
+//                                    FirebaseUser user = fb_auth.getCurrentUser();
+////                                    updateUI(user);
+//
+//                                    Toast.makeText(SignInActivity.this, "Welcome!",
+//                                            Toast.LENGTH_SHORT).show();
+//
+//                                } else {
+//                                    // If sign in fails, display a message to the user.
+////                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+//                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
+//                                            Toast.LENGTH_SHORT).show();
+////                                    updateUI(null);
+//                                }
+//                            }
+//                        });
 
             };
 

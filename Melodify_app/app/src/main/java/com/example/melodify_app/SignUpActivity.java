@@ -4,7 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +15,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ktx.Firebase;
 
 import java.lang.ref.Reference;
@@ -29,11 +32,7 @@ public class SignUpActivity extends Activity {
     Button signup_button;
     TextView redirect_login;
 
-    FirebaseAuth fb_auth;
-//    Firebase database;
-//    Reference reference;
-//    FirebaseDatabase database; // TODO schimbat in FirebaseDatabase??
-//    DatabaseReference reference;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +40,13 @@ public class SignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
 
-        fb_auth = FirebaseAuth.getInstance();
+//        fb_auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         signup_name = findViewById(R.id.signup_name);
         signup_email = findViewById(R.id.signup_email);
         signup_password = findViewById(R.id.signup_password);
-        signup_birth = findViewById(R.id.signup_birth);
+//        signup_birth = findViewById(R.id.signup_birth);
 
         redirect_login=findViewById(R.id.redirect_login);
 
@@ -63,38 +63,36 @@ public class SignUpActivity extends Activity {
         signup_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                database = Firebase.getInstance();
-//                reference= database.getReference("users");
-
                 String name = signup_name.getText().toString();
                 String email = signup_email.getText().toString();
                 String password = signup_password.getText().toString();
                 String birth = signup_birth.getText().toString();
 
-//                din documentatie de la firebase
-                fb_auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                User user= new User(name,email,password,birth);
+//                User user= new User(name,email,password);
+
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Add a new document with a generated ID
+                db.collection("users")
+                        .add(user)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-//                                    Log.d(TAG, "createUserWithEmail:success");
-//                                    FirebaseUser user = fb_auth.getCurrentUser();
-//                                    updateUI(user);
-
-                                    Toast.makeText(SignUpActivity.this, "Account created successfully!",
-                                            Toast.LENGTH_SHORT).show();
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-//                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(SignUpActivity.this, "Account creation failed.",
-                                            Toast.LENGTH_SHORT).show();
-//                                    updateUI(null);
-                                }
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(SignUpActivity.this, "Welcome!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(SignUpActivity.this, "Error creating user!",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
-
             };
 
         });
