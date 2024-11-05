@@ -40,7 +40,6 @@ public class SignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
 
-//        fb_auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         signup_name = findViewById(R.id.signup_name);
@@ -68,8 +67,8 @@ public class SignUpActivity extends Activity {
                 String password = signup_password.getText().toString();
                 String birth = signup_birth.getText().toString();
 
-                User user= new User(name,email,password,birth);
-//                User user= new User(name,email,password);
+//                User user= new User(name,email,password,birth);
+                User user= new User(name,email,password);
 
                 if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
@@ -82,8 +81,11 @@ public class SignUpActivity extends Activity {
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(SignUpActivity.this, "Welcome!",
+                                Toast.makeText(SignUpActivity.this, "You can login now!",
                                         Toast.LENGTH_SHORT).show();
+//                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+//                                startActivity(intent);
+//                                finish();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

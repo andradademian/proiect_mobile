@@ -92,21 +92,21 @@ tools:context=".SignUpActivity">
 
                 />
 
-            <EditText
-                android:id="@+id/signup_birth"
-                android:hint="Date of birth"
-                android:inputType="date"
+<!--            <EditText-->
+<!--                android:id="@+id/signup_birth"-->
+<!--                android:hint="Date of birth"-->
+<!--                android:inputType="date"-->
 
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="40dp"
-                android:padding="8dp"
-                android:drawablePadding="8dp"
-                android:ems="10"
-                android:textColor="@color/black"
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="40dp"-->
+<!--                android:padding="8dp"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:ems="10"-->
+<!--                android:textColor="@color/black"-->
 
-                android:background="#ef9f9f"
-                />
+<!--                android:background="#ef9f9f"-->
+<!--                />-->
 
             <Button
                 android:id="@+id/signup_button"

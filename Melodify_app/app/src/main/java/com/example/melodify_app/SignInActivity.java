@@ -64,6 +64,8 @@ public class SignInActivity extends Activity {
                 String password = login_password.getText().toString();
 
                 db.collection("users")
+                        .whereEqualTo("email", email)
+                        .whereEqualTo("password", password)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -71,8 +73,12 @@ public class SignInActivity extends Activity {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
 //                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                        Toast.makeText(SignInActivity.this, "Welcome!",
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
+                                    Toast.makeText(SignInActivity.this, "Wrong login credentials!",
+                                            Toast.LENGTH_SHORT).show();
 //                                    Log.w(TAG, "Error getting documents.", task.getException());
                                 }
                             }
