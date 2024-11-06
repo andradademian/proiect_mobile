@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
              android:layout_height="match_parent"
-    android:background="@drawable/start_photo">
+    android:background="#ef9f9f">
 
     <Button
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFF00"
+        android:background="#FFFFCC"
         android:text="Add new lyrics"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="12dp"
@@ -20,7 +20,7 @@
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFF00"
+        android:background="#FFFFCC"
         android:text="Add new recording"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="258dp"
@@ -30,7 +30,7 @@
         android:id="@+id/button6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFF00"
+        android:background="#FFFFCC"
         android:text="Save Song"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
@@ -40,7 +40,7 @@
         android:id="@+id/button7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFF00"
+        android:background="#FFFFCC"
         android:text="Delete Song"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="309dp"
