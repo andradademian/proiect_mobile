@@ -1,165 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#AFEEEE"
-    tools:ignore="MissingConstraints">
+    android:layout_gravity="center"
+    tools:context=".Activities.ProfileActivity">
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="ImageContrastCheck"
-        tools:layout_editor_absoluteX="18dp"
-        tools:layout_editor_absoluteY="73dp"
-        tools:src="@tools:sample/avatars" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="185dp"
-        android:layout_height="48dp"
-        android:background="#C41E3A"
-        android:text="Account Settings"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="168dp"
-        tools:layout_editor_absoluteY="155dp" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="304dp"
-        android:layout_height="57dp"
-        android:text="Your top next hits:"
-        android:textColor="#D2042D"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="14dp"
-        tools:layout_editor_absoluteY="257dp" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="336dp"
-        android:layout_height="60dp"
-        android:background="#C41E3A"
-        android:text="New Hit"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="14dp"
-        tools:layout_editor_absoluteY="335dp" />
-
-<!--TODO cu asta ma ocup acum lol-->
-    <androidx.recyclerview.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/recycler_view"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardProfile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp"
-        android:scrollbars="vertical"/>
+        android:layout_height="wrap_content"
+        android:backgroundTint="#eb6c6c"
+        android:padding="30dp"
+        app:cardElevation="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/common_google_signin_btn_text_light_default"
+            android:orientation="horizontal"
+            android:padding="25dp">
+
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="ImageContrastCheck"
+                tools:layout_editor_absoluteX="18dp"
+                tools:layout_editor_absoluteY="73dp"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:padding="10dp"
+                android:text="Username"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="168dp"
+                tools:layout_editor_absoluteY="85dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bigCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#eb6c6c"
+        android:padding="16dp"
+        android:layout_marginTop="30dp"
+        app:cardElevation="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/cardProfile">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your top next hits:"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            />
+
+        <!--TODO cu asta ma ocup acum lol-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:scrollbars="vertical" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!--    <Button-->
+    <!--        android:id="@+id/button"-->
+    <!--        android:layout_width="185dp"-->
+    <!--        android:layout_height="48dp"-->
+    <!--        android:background="#C41E3A"-->
+    <!--        android:text="Account Settings"-->
+    <!--        android:textSize="18sp"-->
+    <!--        tools:layout_editor_absoluteX="168dp"-->
+    <!--        tools:layout_editor_absoluteY="155dp" />-->
+
+
+
+    <!--    <Button-->
+    <!--        android:id="@+id/button2"-->
+    <!--        android:layout_width="336dp"-->
+    <!--        android:layout_height="60dp"-->
+    <!--        android:background="#C41E3A"-->
+    <!--        android:text="New Hit"-->
+    <!--        android:textSize="18sp"-->
+    <!--        tools:layout_editor_absoluteX="14dp"-->
+    <!--        tools:layout_editor_absoluteY="335dp" />-->
+
+
+
+
 
 
 
     <!--    <TextView-->
-<!--        android:id="@+id/textView5"-->
-<!--        android:layout_width="336dp"-->
-<!--        android:layout_height="45dp"-->
-<!--        android:background="#FF999C"-->
-<!--        android:text="Music Title"-->
-<!--        android:textColor="#000000"-->
-<!--        tools:ignore="MissingConstraints"-->
-<!--        tools:layout_editor_absoluteX="16dp"-->
-<!--        tools:layout_editor_absoluteY="433dp" />-->
+    <!--        android:id="@+id/textView5"-->
+    <!--        android:layout_width="336dp"-->
+    <!--        android:layout_height="45dp"-->
+    <!--        android:background="#FF999C"-->
+    <!--        android:text="Music Title"-->
+    <!--        android:textColor="#000000"-->
+    <!--        tools:ignore="MissingConstraints"-->
+    <!--        tools:layout_editor_absoluteX="16dp"-->
+    <!--        tools:layout_editor_absoluteY="433dp" />-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView6"-->
-<!--        android:layout_width="334dp"-->
-<!--        android:layout_height="49dp"-->
-<!--        android:background="#FF999C"-->
-<!--        android:text="Music Title"-->
-<!--        android:textColor="#000000"-->
-<!--        tools:layout_editor_absoluteX="16dp"-->
-<!--        tools:layout_editor_absoluteY="508dp" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView6"-->
+    <!--        android:layout_width="334dp"-->
+    <!--        android:layout_height="49dp"-->
+    <!--        android:background="#FF999C"-->
+    <!--        android:text="Music Title"-->
+    <!--        android:textColor="#000000"-->
+    <!--        tools:layout_editor_absoluteX="16dp"-->
+    <!--        tools:layout_editor_absoluteY="508dp" />-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView7"-->
-<!--        android:layout_width="337dp"-->
-<!--        android:layout_height="52dp"-->
-<!--        android:background="#FF999C"-->
-<!--        android:text="Music Title"-->
-<!--        android:textColor="#000000"-->
-<!--        tools:layout_editor_absoluteX="16dp"-->
-<!--        tools:layout_editor_absoluteY="581dp" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView7"-->
+    <!--        android:layout_width="337dp"-->
+    <!--        android:layout_height="52dp"-->
+    <!--        android:background="#FF999C"-->
+    <!--        android:text="Music Title"-->
+    <!--        android:textColor="#000000"-->
+    <!--        tools:layout_editor_absoluteX="16dp"-->
+    <!--        tools:layout_editor_absoluteY="581dp" />-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView10"-->
-<!--        android:layout_width="334dp"-->
-<!--        android:layout_height="46dp"-->
-<!--        android:layout_alignBottom="@id/textView10"-->
-<!--        android:layout_toEndOf="@id/textView10"-->
-<!--        android:background="#FF999C"-->
-<!--        android:text="Music title"-->
-<!--        android:textColor="#000000"-->
-<!--        tools:layout_editor_absoluteX="18dp"-->
-<!--        tools:layout_editor_absoluteY="656dp" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView10"-->
+    <!--        android:layout_width="334dp"-->
+    <!--        android:layout_height="46dp"-->
+    <!--        android:layout_alignBottom="@id/textView10"-->
+    <!--        android:layout_toEndOf="@id/textView10"-->
+    <!--        android:background="#FF999C"-->
+    <!--        android:text="Music title"-->
+    <!--        android:textColor="#000000"-->
+    <!--        tools:layout_editor_absoluteX="18dp"-->
+    <!--        tools:layout_editor_absoluteY="656dp" />-->
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/imageButton"-->
-<!--        android:layout_width="55dp"-->
-<!--        android:layout_height="41dp"-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:contentDescription="@string/access_song"-->
-<!--        android:scaleType="fitCenter"-->
-<!--        android:src="@drawable/musicicon"-->
-<!--        tools:ignore="TouchTargetSizeCheck"-->
-<!--        tools:layout_editor_absoluteX="295dp"-->
-<!--        tools:layout_editor_absoluteY="433dp" />-->
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/imageButton"-->
+    <!--        android:layout_width="55dp"-->
+    <!--        android:layout_height="41dp"-->
+    <!--        android:background="@android:color/transparent"-->
+    <!--        android:contentDescription="@string/access_song"-->
+    <!--        android:scaleType="fitCenter"-->
+    <!--        android:src="@drawable/musicicon"-->
+    <!--        tools:ignore="TouchTargetSizeCheck"-->
+    <!--        tools:layout_editor_absoluteX="295dp"-->
+    <!--        tools:layout_editor_absoluteY="433dp" />-->
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/imageButton3"-->
-<!--        android:layout_width="55dp"-->
-<!--        android:layout_height="41dp"-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:contentDescription="@string/access_song"-->
-<!--        android:scaleType="fitCenter"-->
-<!--        android:src="@drawable/musicicon"-->
-<!--        tools:ignore="TouchTargetSizeCheck"-->
-<!--        tools:layout_editor_absoluteX="295dp"-->
-<!--        tools:layout_editor_absoluteY="508dp" />-->
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/imageButton3"-->
+    <!--        android:layout_width="55dp"-->
+    <!--        android:layout_height="41dp"-->
+    <!--        android:background="@android:color/transparent"-->
+    <!--        android:contentDescription="@string/access_song"-->
+    <!--        android:scaleType="fitCenter"-->
+    <!--        android:src="@drawable/musicicon"-->
+    <!--        tools:ignore="TouchTargetSizeCheck"-->
+    <!--        tools:layout_editor_absoluteX="295dp"-->
+    <!--        tools:layout_editor_absoluteY="508dp" />-->
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/imageButton4"-->
-<!--        android:layout_width="55dp"-->
-<!--        android:layout_height="41dp"-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:contentDescription="@string/access_song"-->
-<!--        android:scaleType="fitCenter"-->
-<!--        android:src="@drawable/musicicon"-->
-<!--        tools:ignore="TouchTargetSizeCheck"-->
-<!--        tools:layout_editor_absoluteX="298dp"-->
-<!--        tools:layout_editor_absoluteY="581dp" />-->
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/imageButton4"-->
+    <!--        android:layout_width="55dp"-->
+    <!--        android:layout_height="41dp"-->
+    <!--        android:background="@android:color/transparent"-->
+    <!--        android:contentDescription="@string/access_song"-->
+    <!--        android:scaleType="fitCenter"-->
+    <!--        android:src="@drawable/musicicon"-->
+    <!--        tools:ignore="TouchTargetSizeCheck"-->
+    <!--        tools:layout_editor_absoluteX="298dp"-->
+    <!--        tools:layout_editor_absoluteY="581dp" />-->
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/imageButton6"-->
-<!--        android:layout_width="55dp"-->
-<!--        android:layout_height="41dp"-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:scaleType="fitCenter"-->
-<!--        android:src="@drawable/musicicon"-->
-<!--        android:contentDescription="@string/access_song"-->
-<!--        tools:ignore="TouchTargetSizeCheck"-->
-<!--        tools:layout_editor_absoluteX="295dp"-->
-<!--        tools:layout_editor_absoluteY="656dp" />-->
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        android:textColor="#D2042D"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="168dp"
-        tools:layout_editor_absoluteY="85dp" />
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/imageButton6"-->
+    <!--        android:layout_width="55dp"-->
+    <!--        android:layout_height="41dp"-->
+    <!--        android:background="@android:color/transparent"-->
+    <!--        android:scaleType="fitCenter"-->
+    <!--        android:src="@drawable/musicicon"-->
+    <!--        android:contentDescription="@string/access_song"-->
+    <!--        tools:ignore="TouchTargetSizeCheck"-->
+    <!--        tools:layout_editor_absoluteX="295dp"-->
+    <!--        tools:layout_editor_absoluteY="656dp" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
