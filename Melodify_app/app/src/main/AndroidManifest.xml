@@ -13,35 +13,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Melodify_app"
         tools:targetApi="31" >
-<!--        <activity-->
-<!--            android:name=".Starting"-->
-<!--            android:exported="true" >-->
-
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <activity
+            android:name=".StartingActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Melodify_app">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".SignInActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Melodify_app" >
-
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-
-
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+            android:exported="true">
+<!--            android:label="@string/app_name"-->
+<!--            android:theme="@style/Theme.Melodify_app" -->
+<!--             <intent-filter>-->
+<!--             <action android:name="android.intent.action.MAIN" />-->
+<!--             <category android:name="android.intent.category.LAUNCHER" />-->
+<!--             </intent-filter>-->
         </activity>
 
         <activity
             android:name=".SignUpActivity"
             android:exported="true" >
-
         </activity>
 
     </application>
