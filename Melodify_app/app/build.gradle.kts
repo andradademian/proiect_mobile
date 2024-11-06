@@ -68,5 +68,6 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore)
 
+    implementation(libs.jbcrypt) // Adding jBCrypt dependency
 
 }

@@ -28,7 +28,10 @@ import com.google.firebase.ktx.Firebase;
 import java.lang.ref.Reference;
 
 public class SignUpActivity extends Activity {
-    EditText signup_name, signup_email, signup_password;
+    EditText signup_name;
+    EditText signup_email;
+    EditText signup_password;
+    String hashed_password;
 //    EditText signup_birth;
     Button signup_button;
     TextView redirect_login;
@@ -68,13 +71,16 @@ public class SignUpActivity extends Activity {
                 String password = signup_password.getText().toString();
 //                String birth = signup_birth.getText().toString();
 
+                String hashedPassword = PasswordHash.hashPassword(password);
+
+
                 if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
 //                User user= new User(name,email,password,birth);
-                User user= new User(name,email,password);
+                User user= new User(name,email,hashedPassword);
 
                 // Add a new document with a generated ID
                 db.collection("users")
@@ -86,9 +92,10 @@ public class SignUpActivity extends Activity {
                                 Toast.makeText(SignUpActivity.this, "Welcome!",
 
                                         Toast.LENGTH_SHORT).show();
-//                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-//                                startActivity(intent);
-//                                finish();
+
+                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

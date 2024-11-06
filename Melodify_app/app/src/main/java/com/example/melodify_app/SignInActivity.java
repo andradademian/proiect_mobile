@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class SignInActivity extends Activity {
     EditText login_adress, login_password;
+    String hashedPassword;
     Button login_button;
     TextView redirect_register;
 //    FirebaseAuth fb_auth;
@@ -63,9 +64,13 @@ public class SignInActivity extends Activity {
                 String email = login_adress.getText().toString();
                 String password = login_password.getText().toString();
 
+                String hashedPassword = PasswordHash.hashPassword(password);
+
+
+
                 db.collection("users")
                         .whereEqualTo("email", email)
-                        .whereEqualTo("password", password)
+                        .whereEqualTo("password", hashedPassword)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
