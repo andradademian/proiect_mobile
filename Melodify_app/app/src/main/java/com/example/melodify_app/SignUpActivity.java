@@ -65,7 +65,7 @@ public class SignUpActivity extends Activity {
                 String name = signup_name.getText().toString();
                 String email = signup_email.getText().toString();
                 String password = signup_password.getText().toString();
-                String birth = signup_birth.getText().toString();
+//                String birth = signup_birth.getText().toString();
 
 //                User user= new User(name,email,password,birth);
                 User user= new User(name,email,password);
