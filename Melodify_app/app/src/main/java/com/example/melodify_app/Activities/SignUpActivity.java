@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.melodify_app.PasswordHash;
+import com.example.melodify_app.Model_Auxiliare.PasswordHash;
 import com.example.melodify_app.R;
-import com.example.melodify_app.User;
+import com.example.melodify_app.Model_Auxiliare.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;

@@ -1,4 +1,4 @@
-package com.example.melodify_app;
+package com.example.melodify_app.Model_Auxiliare;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.melodify_app.R;
 
 import java.util.List;
 

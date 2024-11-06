@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.melodify_app.ProjectCard;
-import com.example.melodify_app.ProjectCardAdapter;
+import com.example.melodify_app.Model_Auxiliare.ProjectCard;
+import com.example.melodify_app.Model_Auxiliare.ProjectCardAdapter;
 import com.example.melodify_app.R;
 
 import java.util.ArrayList;

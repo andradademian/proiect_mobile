@@ -1,4 +1,4 @@
-package com.example.melodify_app;
+package com.example.melodify_app.Model_Auxiliare;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class User {

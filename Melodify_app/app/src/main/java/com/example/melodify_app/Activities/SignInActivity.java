@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.melodify_app.PasswordHash;
+import com.example.melodify_app.Model_Auxiliare.PasswordHash;
 import com.example.melodify_app.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

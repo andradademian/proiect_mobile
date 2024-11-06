@@ -2,7 +2,7 @@ package com.example.melodify_app.Service;
 
 import androidx.annotation.NonNull;
 
-import com.example.melodify_app.User;
+import com.example.melodify_app.Model_Auxiliare.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
