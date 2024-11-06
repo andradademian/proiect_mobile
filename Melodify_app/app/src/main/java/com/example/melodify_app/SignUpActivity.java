@@ -28,7 +28,8 @@ import com.google.firebase.ktx.Firebase;
 import java.lang.ref.Reference;
 
 public class SignUpActivity extends Activity {
-    EditText signup_name, signup_email, signup_password, signup_birth;
+    EditText signup_name, signup_email, signup_password;
+//    EditText signup_birth;
     Button signup_button;
     TextView redirect_login;
 
@@ -67,13 +68,13 @@ public class SignUpActivity extends Activity {
                 String password = signup_password.getText().toString();
 //                String birth = signup_birth.getText().toString();
 
-//                User user= new User(name,email,password,birth);
-                User user= new User(name,email,password);
-
                 if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+//                User user= new User(name,email,password,birth);
+                User user= new User(name,email,password);
 
                 // Add a new document with a generated ID
                 db.collection("users")
@@ -81,7 +82,9 @@ public class SignUpActivity extends Activity {
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(SignUpActivity.this, "You can login now!",
+//                                Toast.makeText(SignUpActivity.this, "You can login now!",
+                                Toast.makeText(SignUpActivity.this, "Welcome!",
+
                                         Toast.LENGTH_SHORT).show();
 //                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
 //                                startActivity(intent);
