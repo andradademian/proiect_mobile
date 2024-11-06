@@ -61,14 +61,19 @@
         android:padding="16dp"
         android:layout_marginTop="30dp"
         app:cardElevation="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/cardProfile">
+        app:layout_constraintTop_toBottomOf="@+id/cardProfile"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="15dp">
+            android:padding="20dp">
+<!--            app:layout_constraintTop_toTopOf="@id/parent"-->
+<!--            app:layout_constraintStart_toStartOf="id/parent"-->
+<!--            app:layout_constraintEnd_toEndOf="id/parent"-->
+            >
 
         <TextView
             android:id="@+id/textView4"
@@ -80,13 +85,34 @@
             android:textStyle="bold"
             />
 
-        <!--TODO cu asta ma ocup acum lol-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:scrollbars="vertical" />
+            <Button
+                android:id="@+id/add_project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            />
+
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/add_project"
+                    />
+
+                <!--TODO cu asta ma ocup acum lol-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:scrollbars="vertical" />
+
+            </ScrollView>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
