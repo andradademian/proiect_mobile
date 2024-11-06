@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.melodify_app" >
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,7 +16,7 @@
         android:theme="@style/Theme.Melodify_app"
         tools:targetApi="31" >
         <activity
-            android:name=".StartingActivity"
+            android:name=".Activities.StartingActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Melodify_app">
@@ -25,7 +27,7 @@
         </activity>
 
         <activity
-            android:name=".SignInActivity"
+            android:name=".Activities.SignInActivity"
             android:exported="true">
 <!--            android:label="@string/app_name"-->
 <!--            android:theme="@style/Theme.Melodify_app" -->
@@ -36,7 +38,7 @@
         </activity>
 
         <activity
-            android:name=".SignUpActivity"
+            android:name=".Activities.SignUpActivity"
             android:exported="true" >
         </activity>
 

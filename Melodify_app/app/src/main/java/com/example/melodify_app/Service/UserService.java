@@ -1,10 +1,7 @@
 package com.example.melodify_app.Service;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
-import com.example.melodify_app.SignUpActivity;
 import com.example.melodify_app.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

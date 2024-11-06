@@ -1,4 +1,4 @@
-package com.example.melodify_app;
+package com.example.melodify_app.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.Nullable;
+
+import com.example.melodify_app.R;
 
 public class StartingActivity extends Activity {
     @Override

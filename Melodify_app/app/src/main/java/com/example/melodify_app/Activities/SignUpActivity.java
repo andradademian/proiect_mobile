@@ -1,11 +1,8 @@
-package com.example.melodify_app;
-
-import static android.content.ContentValues.TAG;
+package com.example.melodify_app.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,18 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.melodify_app.PasswordHash;
+import com.example.melodify_app.R;
+import com.example.melodify_app.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.ktx.Firebase;
-
-import java.lang.ref.Reference;
 
 public class SignUpActivity extends Activity {
     EditText signup_name;
@@ -81,6 +73,8 @@ public class SignUpActivity extends Activity {
 
 //                User user= new User(name,email,password,birth);
                 User user= new User(name,email,hashedPassword);
+
+                //TODO sa nu adaugi de mai multe ori acceasei chestie in db
 
                 // Add a new document with a generated ID
                 db.collection("users")
