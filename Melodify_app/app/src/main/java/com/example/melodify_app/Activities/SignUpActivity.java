@@ -84,7 +84,6 @@ public class SignUpActivity extends Activity {
                             public void onSuccess(DocumentReference documentReference) {
 //                                Toast.makeText(SignUpActivity.this, "You can login now!",
                                 Toast.makeText(SignUpActivity.this, "Welcome!",
-
                                         Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);

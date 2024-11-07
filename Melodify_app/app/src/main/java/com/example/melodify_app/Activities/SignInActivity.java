@@ -64,7 +64,6 @@ public class SignInActivity extends Activity {
 
                 String hashedPassword = PasswordHash.hashPassword(password);
 
-
                 db.collection("users")
                         .whereEqualTo("email", email)
                         .whereEqualTo("password", hashedPassword)
@@ -77,6 +76,9 @@ public class SignInActivity extends Activity {
 //                                        Log.d(TAG, document.getId() + " => " + document.getData());
                                         Toast.makeText(SignInActivity.this, "Welcome!",
                                                 Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(SignInActivity.this, ProfileActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     }
                                 } else {
                                     Toast.makeText(SignInActivity.this, "Wrong login credentials!",
@@ -85,31 +87,6 @@ public class SignInActivity extends Activity {
                                 }
                             }
                         });
-
-                //din documentatie de la firebase
-//                fb_auth.createUserWithEmailAndPassword(email, password)
-//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//                                if (task.isSuccessful()) {
-//                                    // Sign in success, update UI with the signed-in user's information
-////                                    Log.d(TAG, "createUserWithEmail:success");
-//                                    FirebaseUser user = fb_auth.getCurrentUser();
-////                                    updateUI(user);
-//
-//                                    Toast.makeText(SignInActivity.this, "Welcome!",
-//                                            Toast.LENGTH_SHORT).show();
-//
-//                                } else {
-//                                    // If sign in fails, display a message to the user.
-////                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-//                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
-//                                            Toast.LENGTH_SHORT).show();
-////                                    updateUI(null);
-//                                }
-//                            }
-//                        });
-
             };
 
         });
