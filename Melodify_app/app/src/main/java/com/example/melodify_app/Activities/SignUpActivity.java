@@ -3,6 +3,7 @@ package com.example.melodify_app.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,7 +65,7 @@ public class SignUpActivity extends Activity {
 //                String birth = signup_birth.getText().toString();
 
                 String hashedPassword = PasswordHash.hashPassword(password);
-
+                //Log.d("SIGNUP_HASH", "Hashed Password: " + hashedPassword);
 
                 if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
@@ -78,14 +79,12 @@ public class SignUpActivity extends Activity {
 
                 // Add a new document with a generated ID
                 db.collection("users")
-                        .add(user)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        .document(email)  // Use email as the document ID
+                        .set(user)        // Save the user object
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(DocumentReference documentReference) {
-//                                Toast.makeText(SignUpActivity.this, "You can login now!",
-                                Toast.makeText(SignUpActivity.this, "Welcome!",
-                                        Toast.LENGTH_SHORT).show();
-
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(SignUpActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -94,10 +93,10 @@ public class SignUpActivity extends Activity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(SignUpActivity.this, "Error creating user!",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this, "Error creating user!", Toast.LENGTH_SHORT).show();
                             }
                         });
+
             };
 
         });
