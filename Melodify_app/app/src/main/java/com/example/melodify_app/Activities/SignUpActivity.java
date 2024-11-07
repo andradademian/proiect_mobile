@@ -17,15 +17,13 @@ import com.example.melodify_app.R;
 import com.example.melodify_app.Model_Auxiliare.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpActivity extends Activity {
     EditText signup_name;
     EditText signup_email;
     EditText signup_password;
-    String hashed_password;
-//    EditText signup_birth;
     Button signup_button;
     TextView redirect_login;
 
@@ -33,7 +31,6 @@ public class SignUpActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
 
@@ -42,63 +39,69 @@ public class SignUpActivity extends Activity {
         signup_name = findViewById(R.id.signup_name);
         signup_email = findViewById(R.id.signup_email);
         signup_password = findViewById(R.id.signup_password);
-//        signup_birth = findViewById(R.id.signup_birth);
-
-        redirect_login=findViewById(R.id.redirect_login);
+        redirect_login = findViewById(R.id.redirect_login);
 
         redirect_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(), SignInActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
 
-        signup_button=findViewById(R.id.signup_button);
+        signup_button = findViewById(R.id.signup_button);
         signup_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = signup_name.getText().toString();
                 String email = signup_email.getText().toString();
                 String password = signup_password.getText().toString();
-//                String birth = signup_birth.getText().toString();
-
-                String hashedPassword = PasswordHash.hashPassword(password);
-                //Log.d("SIGNUP_HASH", "Hashed Password: " + hashedPassword);
 
                 if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-//                User user= new User(name,email,password,birth);
-                User user= new User(name,email,hashedPassword);
+                String hashedPassword = PasswordHash.hashPassword(password);
 
-                //TODO sa nu adaugi de mai multe ori acceasei chestie in db
-
-                // Add a new document with a generated ID
-                db.collection("users")
-                        .document(email)  // Use email as the document ID
-                        .set(user)        // Save the user object
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                // Check if the email already exists in Firestore
+                db.collection("users").document(email).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(SignUpActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-                                startActivity(intent);
-                                finish();
+                            public void onSuccess(DocumentSnapshot document) {
+                                if (document.exists()) {
+                                    Toast.makeText(SignUpActivity.this, "Email is already registered!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // If email doesn't exist, save the new user
+                                    User user = new User(name, email, hashedPassword);
+                                    db.collection("users").document(email).set(user)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Toast.makeText(SignUpActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(SignUpActivity.this, "Error creating user!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(SignUpActivity.this, "Error creating user!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this, "Error checking email!", Toast.LENGTH_SHORT).show();
+                                Log.e("SIGNUP_ERROR", "Error: ", e);
                             }
                         });
-
-            };
-
+            }
         });
     }
 }
