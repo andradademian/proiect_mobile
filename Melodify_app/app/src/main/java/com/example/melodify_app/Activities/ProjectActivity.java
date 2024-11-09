@@ -1,16 +1,119 @@
 package com.example.melodify_app.Activities;
 
 import android.app.Activity;
+import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.melodify_app.R;
 
+import java.io.File;
+import java.io.IOException;
+
 public class ProjectActivity extends Activity {
+
+    private Button saveSongButton;
+    private Button addRecordingButton;
+    private Button deleteSongButton;
+    private ImageButton playRecordingButton;
+    private ImageButton pinButton;
+
+    private MediaRecorder mediaRecorder;
+    private String filePath;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
+
+        saveSongButton = findViewById(R.id.button6);
+        addRecordingButton = findViewById(R.id.button5);
+        deleteSongButton = findViewById(R.id.button7);
+        playRecordingButton = findViewById(R.id.imageButton2);
+        pinButton = findViewById(R.id.imageButton7);
+
+
+        filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
+
+        // Set up Add New Recording Button functionality
+        addRecordingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRecording(); // Start recording
+            }
+        });
+
+        // Set up Play Recording Button functionality
+        playRecordingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playRecording(); // Play the recording
+            }
+        });
+
+        // Set up Delete Song Button functionality
+        deleteSongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Implement logic to delete song data here
+                deleteRecording(); // Delete the recorded file
+            }
+        });
+    }
+
+    // Start the audio recording
+
+    private void startRecording() {
+        try {
+            mediaRecorder = new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); // Set the audio source (microphone)
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP); // Output format
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB); // Audio encoder
+            mediaRecorder.setOutputFile(filePath); // Path to save the recording
+
+            mediaRecorder.prepare(); // Prepare the recorder
+            mediaRecorder.start(); // Start recording
+
+            Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show();
+            Log.e("Recording Error", "Error while recording: " + e.getMessage());
+        }
+    }
+
+    // Play the recorded audio
+    private void playRecording() {
+        // You can use MediaPlayer to play back the audio.
+        // This is just a placeholder method. Implement MediaPlayer as needed.
+        Toast.makeText(this, "Playing recording", Toast.LENGTH_SHORT).show();
+    }
+
+    // Delete the recorded file
+    private void deleteRecording() {
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.delete()) {
+                Toast.makeText(this, "Recording deleted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to delete recording", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // Release resources when done with recording
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mediaRecorder != null) {
+            mediaRecorder.release(); // Release the media recorder
+            mediaRecorder = null;
+        }
     }
 }
