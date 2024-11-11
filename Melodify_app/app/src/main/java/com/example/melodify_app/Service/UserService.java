@@ -1,5 +1,7 @@
 package com.example.melodify_app.Service;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.melodify_app.Model_Auxiliare.User;
@@ -57,6 +59,32 @@ public class UserService implements Service<User> {
     public void getById() {
 
     }
+    @Override
+    public void getUserByEmail(String email) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Access the collection and get the document by email (used as the ID)
+        db.collection("users")
+                .document(email)  // Assuming email is used as the document ID
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Deserialize the document into a User object
+                        User user = documentSnapshot.toObject(User.class);
+                        if (user != null) {
+                            Log.d("getUserByEmail", "User found: " + user.toString());
+                        } else {
+                            Log.d("getUserByEmail", "User object is null");
+                        }
+                    } else {
+                        Log.d("getUserByEmail", "No user found with this email");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("getUserByEmail", "Error fetching user", e);
+                });
+    }
+
 
     @Override
     public void delete() {

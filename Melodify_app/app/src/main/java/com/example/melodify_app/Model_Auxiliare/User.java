@@ -6,12 +6,12 @@ public class User {
     String email;
     String password;
     String birthday;
-    public User(String name, String email, String password, String birthday) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.birthday = birthday;
-    }
+//    public User(String name, String email, String password, String birthday) {
+//        this.name = name;
+//        this.email = email;
+//        this.password = password;
+//        this.birthday = birthday;
+//    }
 
     public User(String name, String email, String password) {
         this.name = name;
@@ -44,11 +44,12 @@ public class User {
         this.password = password;
     }
 
-    public String getBirthday() {
-        return birthday;
-    }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
+//    public String getBirthday() {
+//        return birthday;
+//    }
+//
+//    public void setBirthday(String birthday) {
+//        this.birthday = birthday;
+//    }
 }

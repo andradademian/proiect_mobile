@@ -4,5 +4,6 @@ public interface Service<T> {
     void save(T stuff);
     void getAll();
     void getById();
+    void getUserByEmail(String email);
     void delete();
 }
