@@ -1,6 +1,8 @@
 package com.example.melodify_app.Activities;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +11,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.melodify_app.R;
 
@@ -18,7 +23,7 @@ import java.io.IOException;
 
 public class ProjectActivity extends Activity {
 
-    private Button saveSongButton;
+    private Button stopRecordingButton;
     private Button addRecordingButton;
     private Button deleteSongButton;
     private ImageButton playRecordingButton;
@@ -26,18 +31,19 @@ public class ProjectActivity extends Activity {
 
     private MediaRecorder mediaRecorder;
     private String filePath;
+    private boolean isRecording = false;
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
 
-        saveSongButton = findViewById(R.id.button6);
+        stopRecordingButton = findViewById(R.id.button6);
         addRecordingButton = findViewById(R.id.button5);
         deleteSongButton = findViewById(R.id.button7);
         playRecordingButton = findViewById(R.id.imageButton2);
         pinButton = findViewById(R.id.imageButton7);
-
 
         filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
 
@@ -45,7 +51,19 @@ public class ProjectActivity extends Activity {
         addRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startRecording(); // Start recording
+                if (checkPermissions()) {
+                    startRecording(); // Start recording if permissions are granted
+                } else {
+                    requestPermissions(); // Request necessary permissions
+                }
+            }
+        });
+
+        // Set up Stop Recording Button functionality
+        stopRecordingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopRecording(); // Stop the recording
             }
         });
 
@@ -61,15 +79,41 @@ public class ProjectActivity extends Activity {
         deleteSongButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Implement logic to delete song data here
                 deleteRecording(); // Delete the recorded file
             }
         });
     }
 
-    // Start the audio recording
+    // Check if the required permissions are granted
+    private boolean checkPermissions() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
 
+    // Request audio recording and storage permissions
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_RECORD_AUDIO_PERMISSION);
+    }
+
+    // Handle the result of the permission request
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startRecording();
+            } else {
+                Toast.makeText(this, "Permissions are required to record audio", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // Start the audio recording
     private void startRecording() {
+        if (isRecording) {
+            Toast.makeText(this, "Recording is already in progress", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
             mediaRecorder = new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); // Set the audio source (microphone)
@@ -79,19 +123,44 @@ public class ProjectActivity extends Activity {
 
             mediaRecorder.prepare(); // Prepare the recorder
             mediaRecorder.start(); // Start recording
+            isRecording = true;
 
             Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
+            Log.i("Recording Status", "Recording started successfully");
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show();
-            Log.e("Recording Error", "Error while recording: " + e.getMessage());
+            Log.e("Recording Error", "Error while preparing or starting recording: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Recording setup error", Toast.LENGTH_SHORT).show();
+            Log.e("Recording Error", "IllegalStateException: " + e.getMessage());
+        }
+    }
+
+    // Stop the audio recording
+    private void stopRecording() {
+        if (mediaRecorder != null && isRecording) {
+            try {
+                mediaRecorder.stop();
+                mediaRecorder.release();
+                mediaRecorder = null;
+                isRecording = false;
+
+                Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
+                Log.i("Recording Status", "Recording stopped successfully");
+            } catch (RuntimeException e) {
+                Log.e("Recording Error", "Error while stopping recording: " + e.getMessage());
+                Toast.makeText(this, "Failed to stop recording", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "No recording is in progress", Toast.LENGTH_SHORT).show();
         }
     }
 
     // Play the recorded audio
     private void playRecording() {
-        // You can use MediaPlayer to play back the audio.
-        // This is just a placeholder method. Implement MediaPlayer as needed.
+        // Placeholder for playing the recorded audio using MediaPlayer
         Toast.makeText(this, "Playing recording", Toast.LENGTH_SHORT).show();
     }
 
