@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +33,11 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
         ProjectCard cardData = dataList.get(position);
         holder.titleText.setText(cardData.getTitle());
         holder.descriptionText.setText(cardData.getDescription());
+
+        holder.itemView.setOnClickListener(v -> {
+            Toast.makeText(v.getContext(), "Clicked on: " + cardData.getTitle(), Toast.LENGTH_SHORT).show();
+            // Alternatively, add navigation or any other actions here
+        });
     }
 
     @Override
@@ -49,4 +55,3 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
         }
     }
 }
-
