@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.melodify_app.Model_Auxiliare.PasswordHash;
+import com.example.melodify_app.Model_Auxiliare.User;
 import com.example.melodify_app.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -70,7 +71,11 @@ public class SignInActivity extends Activity {
                                     // Check if the entered password matches the stored hashed password
                                     if (PasswordHash.checkPassword(password, storedHashedPassword)) {
                                         Toast.makeText(SignInActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
+
+                                        User user = new User (document.getString("name"), document.getString("email"), document.getString("password"));
                                         Intent intent = new Intent(SignInActivity.this, ProfileActivity.class);
+                                        intent.putExtra("USER", user);
+
                                         startActivity(intent);
                                         finish();
                                     } else {

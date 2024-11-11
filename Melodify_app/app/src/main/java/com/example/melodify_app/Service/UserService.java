@@ -60,7 +60,7 @@ public class UserService implements Service<User> {
 
     }
     @Override
-    public void getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Access the collection and get the document by email (used as the ID)
@@ -83,6 +83,7 @@ public class UserService implements Service<User> {
                 .addOnFailureListener(e -> {
                     Log.e("getUserByEmail", "Error fetching user", e);
                 });
+        return null;
     }
 
 
