@@ -1,6 +1,8 @@
 package com.example.melodify_app.Model_Auxiliare;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     String name;
     String email;
