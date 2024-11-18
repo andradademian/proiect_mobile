@@ -28,7 +28,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -59,20 +58,19 @@ public class ProfileActivity extends Activity {
         user = (User) getIntent().getSerializableExtra("USER");
         TextView username = findViewById(R.id.username);
         username.setText(user.getName());
-        Query query = db.collection("projects")
-                .whereEqualTo("user_id", user.getEmail());
 
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("projects")
+                .whereEqualTo("userID", user.getEmail())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     QuerySnapshot querySnapshot = task.getResult();
                     for (DocumentSnapshot document : querySnapshot) {
 //                        String projectId = document.getId();
-                        String projectName = document.getString("project_name");  // Assuming there's a 'project_name' field
+                        String projectName = document.getString("name");  // Assuming there's a 'project_name' field
 //                        String userId = document.getString("user_id");  // Assuming there's a 'user_id' field
                         String projectDescription = document.getString("description");  // Assuming there's a 'user_id' field
-
                         ProjectCard projectCard = new ProjectCard(projectName, projectDescription);
                         cardDataList.add(projectCard);
                     }
@@ -156,7 +154,7 @@ public class ProfileActivity extends Activity {
                 Project newHit = new Project(hTitle, hDescription, user.getEmail());
 //                projectService.save(newHit);
                 db.collection("projects")
-                        .document(newHit.getProjectID())
+                        .document(newHit.getUserID()+"_"+newHit.getName())
                         .set(newHit)
 //                        .add(newHit)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -164,7 +162,8 @@ public class ProfileActivity extends Activity {
                             public void onSuccess(Void unused) {
                         Toast.makeText(ProfileActivity.this,
                                 "New Song added!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
+                                cardDataList.add(new ProjectCard(newHit.getName(),newHit.getDescription()));
+                                Intent intent = new Intent(ProfileActivity.this, ProjectActivity.class);
                                 intent.putExtra("NEW_HIT", newHit);
                                 startActivity(intent);
                                 finish();

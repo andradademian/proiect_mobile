@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Project implements Serializable {
     String projectID;
-    private static int idCounter = 1;
+//    private static int idCounter = 1;
 
     String userID;
     String name;
@@ -14,7 +14,7 @@ public class Project implements Serializable {
     ArrayList<AudioFile> audioFiles;
 
     public Project(String name, String description,String userID) {
-        this.projectID=String.valueOf(idCounter++);
+//        this.projectID=String.valueOf(++idCounter);
         this.name = name;
         this.description = description;
         this.userID=userID;
@@ -31,9 +31,9 @@ public class Project implements Serializable {
         return projectID;
     }
 
-    public static int getIdCounter() {
-        return idCounter;
-    }
+//    public static int getIdCounter() {
+//        return idCounter;
+//    }
 
     public String getUserID() {
         return userID;
