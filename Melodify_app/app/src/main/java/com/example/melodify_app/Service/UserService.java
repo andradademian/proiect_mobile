@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.melodify_app.Model_Auxiliare.PasswordHash;
 import com.example.melodify_app.Model_Auxiliare.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,7 +36,31 @@ public class UserService implements Service<User> {
 //                                Toast.LENGTH_SHORT).show();
                     }
                 });
-    };
+    }
+
+    public void update(String email, String newName, String newPassword) {
+        // Hash the new password
+        String hashedPassword = PasswordHash.hashPassword(newPassword);
+
+        // Update the Firestore document
+        db.collection("users").document(email)
+                .update("name", newName, "password", hashedPassword)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("update", "User successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("update", "Error updating user", e);
+                    }
+                });
+    }
+
+
+
 
     @Override
     public void getAll() {
