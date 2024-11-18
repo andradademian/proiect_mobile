@@ -63,6 +63,7 @@
                     android:textStyle="bold" />
 
                 <Button
+                    android:id="@+id/edit_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Edit Profile" />
@@ -111,7 +112,7 @@
 
             <!--            TODO NEW HIT CA SI PRIM ELEMENT IN SCOLL VIEW-->
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/new_hit_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"

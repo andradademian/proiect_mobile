@@ -25,7 +25,7 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_card_layout, parent, false);
         return new CardViewHolder(view);
     }
 
@@ -37,7 +37,7 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
 
         holder.itemView.setOnClickListener(v -> {
             // Create an Intent to navigate to the Project activity
-            Toast.makeText(v.getContext(),"kbfjacbfa",Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(),"slay",Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(v.getContext(), Project.class);
 
