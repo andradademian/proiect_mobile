@@ -17,6 +17,7 @@ import com.example.melodify_app.Model_Auxiliare.ProjectCard;
 import com.example.melodify_app.Model_Auxiliare.ProjectCardAdapter;
 import com.example.melodify_app.Model_Auxiliare.User;
 import com.example.melodify_app.R;
+import com.example.melodify_app.Service.UserService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,12 +35,14 @@ public class ProfileActivity extends Activity {
     User user;
 
     FirebaseFirestore db;
+    UserService userService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_layout);
         db = FirebaseFirestore.getInstance();
+        userService=new UserService();
         edit_button = findViewById(R.id.edit_button);
         new_hit_button=findViewById(R.id.new_hit_button);
         cardDataList = new ArrayList<>();
@@ -108,11 +111,17 @@ public class ProfileActivity extends Activity {
 
             // Handle the logic to update the username or password here
             if (!newUsername.isEmpty() && !newPassword.isEmpty()) {
-                //TODO SCHIMBAT ASTEA pt ca se da edit doar la instanta de user de aici
                 user.setName(newUsername);
                 user.setPassword(newPassword);
+
+                userService.update(user.getEmail(),user.getName(),user.getPassword());
+
+                Toast.makeText(ProfileActivity.this, "yay!", Toast.LENGTH_SHORT).show();
+
+
             } else {
-                Toast.makeText(ProfileActivity.this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this,
+                        "Please enter both username and password", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
