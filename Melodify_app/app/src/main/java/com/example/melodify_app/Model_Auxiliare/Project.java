@@ -26,4 +26,32 @@ public class Project implements Serializable {
         this.description = description;
         this.userID=userID;
     }
+
+    public String getProjectID() {
+        return projectID;
+    }
+
+    public static int getIdCounter() {
+        return idCounter;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public ArrayList<String> getTextFiles() {
+        return textFiles;
+    }
+
+    public ArrayList<AudioFile> getAudioFiles() {
+        return audioFiles;
+    }
 }

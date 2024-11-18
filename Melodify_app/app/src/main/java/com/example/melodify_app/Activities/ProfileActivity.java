@@ -2,6 +2,7 @@ package com.example.melodify_app.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -156,12 +156,18 @@ public class ProfileActivity extends Activity {
                 Project newHit = new Project(hTitle, hDescription, user.getEmail());
 //                projectService.save(newHit);
                 db.collection("projects")
-                        .add(newHit)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        .document(newHit.getProjectID())
+                        .set(newHit)
+//                        .add(newHit)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(DocumentReference documentReference) {
+                            public void onSuccess(Void unused) {
                         Toast.makeText(ProfileActivity.this,
                                 "New Song added!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
+                                intent.putExtra("NEW_HIT", newHit);
+                                startActivity(intent);
+                                finish();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -171,11 +177,6 @@ public class ProfileActivity extends Activity {
                                 Toast.LENGTH_SHORT).show();
                             }
                         });
-
-//                Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
-//                intent.putExtra("NEW_HIT", newHit);
-//                startActivity(intent);
-//                finish();
             }
         });
 
