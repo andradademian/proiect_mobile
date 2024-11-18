@@ -37,6 +37,10 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
         holder.itemView.setOnClickListener(v -> {
             Toast.makeText(v.getContext(), "Clicked on: " + cardData.getTitle(), Toast.LENGTH_SHORT).show();
             // Alternatively, add navigation or any other actions here
+            //TODO THIS
+//            Intent intent = new Intent(ProjectCard.this, Project.class);
+//            startActivity(intent);
+//            finish();
         });
     }
 
