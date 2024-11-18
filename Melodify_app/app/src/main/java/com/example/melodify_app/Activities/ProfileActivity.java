@@ -116,8 +116,10 @@ public class ProfileActivity extends Activity {
 
                 userService.update(user.getEmail(),user.getName(),user.getPassword());
 
-                Toast.makeText(ProfileActivity.this, "yay!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
 
+                // Refresh the activity
+                recreate();
 
             } else {
                 Toast.makeText(ProfileActivity.this,
