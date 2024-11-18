@@ -1,5 +1,6 @@
 package com.example.melodify_app.Model_Auxiliare;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,14 +36,17 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
         holder.descriptionText.setText(cardData.getDescription());
 
         holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Clicked on: " + cardData.getTitle(), Toast.LENGTH_SHORT).show();
-            // Alternatively, add navigation or any other actions here
-            //TODO THIS
-//            Intent intent = new Intent(ProjectCard.this, Project.class);
-//            startActivity(intent);
-//            finish();
+            // Create an Intent to navigate to the Project activity
+            Intent intent = new Intent(v.getContext(), Project.class);
+
+            // Optionally pass data if needed
+            intent.putExtra("title", cardData.getTitle());
+            intent.putExtra("description", cardData.getDescription());
+
+            v.getContext().startActivity(intent);
         });
     }
+
 
     @Override
     public int getItemCount() {

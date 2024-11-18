@@ -42,8 +42,8 @@ public class ProjectActivity extends Activity {
         stopRecordingButton = findViewById(R.id.button6);
         addRecordingButton = findViewById(R.id.button5);
         deleteSongButton = findViewById(R.id.button7);
-        playRecordingButton = findViewById(R.id.imageButton2);
-        pinButton = findViewById(R.id.imageButton7);
+        //playRecordingButton = findViewById(R.id.imageButton2);
+        //pinButton = findViewById(R.id.imageButton7);
 
         filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
 
