@@ -25,7 +25,7 @@ public class UserService implements Service<User> {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-//                        Toast.makeText(SignUpActivity.this, "Welcome!",
+//                        Toast.makeText(activity.this, "Welcome!",
 //                                Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -59,9 +59,6 @@ public class UserService implements Service<User> {
                 });
     }
 
-
-
-
     @Override
     public void getAll() {
         db.collection("users")
@@ -84,7 +81,8 @@ public class UserService implements Service<User> {
     public void getById() {
 
     }
-    @Override
+
+
     public User getUserByEmail(String email) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 

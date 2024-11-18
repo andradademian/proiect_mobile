@@ -9,17 +9,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.melodify_app.Model_Auxiliare.Project;
 import com.example.melodify_app.Model_Auxiliare.ProjectCard;
 import com.example.melodify_app.Model_Auxiliare.ProjectCardAdapter;
 import com.example.melodify_app.Model_Auxiliare.User;
 import com.example.melodify_app.R;
+import com.example.melodify_app.Service.ProjectService;
 import com.example.melodify_app.Service.UserService;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -36,15 +42,18 @@ public class ProfileActivity extends Activity {
 
     FirebaseFirestore db;
     UserService userService;
+    ProjectService projectService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_layout);
         db = FirebaseFirestore.getInstance();
-        userService=new UserService();
+        userService = new UserService();
+        projectService = new ProjectService();
+
         edit_button = findViewById(R.id.edit_button);
-        new_hit_button=findViewById(R.id.new_hit_button);
+        new_hit_button = findViewById(R.id.new_hit_button);
         cardDataList = new ArrayList<>();
 
         user = (User) getIntent().getSerializableExtra("USER");
@@ -86,9 +95,9 @@ public class ProfileActivity extends Activity {
             }
         });
 
-        new_hit_button.setOnClickListener(new View.OnClickListener(){
+        new_hit_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 showNewProjectDialog();
             }
         });
@@ -104,23 +113,19 @@ public class ProfileActivity extends Activity {
         EditText etUsername = view.findViewById(R.id.etUsername);
         EditText etPassword = view.findViewById(R.id.etPassword);
 
-        // Add the buttons for "Save" and "Cancel"
         builder.setPositiveButton("Save", (dialog, which) -> {
             String newUsername = etUsername.getText().toString();
             String newPassword = etPassword.getText().toString();
 
-            // Handle the logic to update the username or password here
             if (!newUsername.isEmpty() && !newPassword.isEmpty()) {
                 user.setName(newUsername);
                 user.setPassword(newPassword);
 
-                userService.update(user.getEmail(),user.getName(),user.getPassword());
+                userService.update(user.getEmail(), user.getName(), user.getPassword());
 
                 Toast.makeText(ProfileActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
 
-                // Refresh the activity
                 recreate();
-
             } else {
                 Toast.makeText(ProfileActivity.this,
                         "Please enter both username and password", Toast.LENGTH_SHORT).show();
@@ -130,11 +135,49 @@ public class ProfileActivity extends Activity {
         builder.create().show();
     }
 
-    private void showNewProjectDialog(){
+    private void showNewProjectDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
         builder.setTitle("Let's get it started!");
 
         //TODO stuff here to initialise a new hit
+
+        View view = getLayoutInflater().inflate(R.layout.new_hit_layout, null);
+        builder.setView(view);
+
+        EditText hit_title = view.findViewById(R.id.hit_title);
+        EditText hit_description = view.findViewById(R.id.hit_description);
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String hTitle = hit_title.getText().toString();
+            String hDescription = hit_description.getText().toString();
+
+            if (!hTitle.isEmpty()) {
+                // TODO redirect
+                Project newHit = new Project(hTitle, hDescription, user.getEmail());
+//                projectService.save(newHit);
+                db.collection("projects")
+                        .add(newHit)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(ProfileActivity.this,
+                                "New Song added!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ProfileActivity.this, "Error creating project!",
+                                Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+//                Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
+//                intent.putExtra("NEW_HIT", newHit);
+//                startActivity(intent);
+//                finish();
+            }
+        });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         builder.create().show();
