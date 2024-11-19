@@ -84,12 +84,14 @@ public class ProfileActivity extends Activity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new ProjectCardAdapter(cardDataList));
+        recyclerView.requestLayout();
 
         edit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showEditDialog();
                 username.setText(user.getName());
+                recyclerView.requestLayout();
             }
         });
 
@@ -97,6 +99,7 @@ public class ProfileActivity extends Activity {
             @Override
             public void onClick(View v) {
                 showNewProjectDialog();
+                recyclerView.requestLayout();
             }
         });
     }
