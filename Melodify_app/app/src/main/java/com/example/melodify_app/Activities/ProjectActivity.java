@@ -3,6 +3,7 @@ package com.example.melodify_app.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,15 +16,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.melodify_app.Model_Auxiliare.AudioFile;
+import com.example.melodify_app.Model_Auxiliare.Lyrics;
+import com.example.melodify_app.Model_Auxiliare.LyricsAdapter;
+import com.example.melodify_app.Model_Auxiliare.ProjectCard;
+import com.example.melodify_app.Model_Auxiliare.ProjectCardAdapter;
 import com.example.melodify_app.R;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectActivity extends Activity {
 
     private Button stopRecordingButton;
+    List<Lyrics> cardDataList3;
     private Button addRecordingButton;
     private Button deleteSongButton;
     private ImageButton playRecordingButton;
@@ -39,15 +50,54 @@ public class ProjectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
 
+////        List<AudioFile> cardDataList2 = new ArrayList<>();
+//        cardDataList2.add(new AudioFile("Title 1"));
+//        cardDataList2.add(new AudioFile("Title 2"));
+//        cardDataList2.add(new AudioFile("Title 3"));
+//        cardDataList2.add(new AudioFile("Title 4"));
+//        cardDataList2.add(new AudioFile("Title 3"));
+//        cardDataList2.add(new AudioFile("Title 4"));
+
+        cardDataList3 = new ArrayList<>();
+        cardDataList3.add(new Lyrics("Title 5"));
+        cardDataList3.add(new Lyrics("Title 6"));
+        cardDataList3.add(new Lyrics("Title 5"));
+        cardDataList3.add(new Lyrics("Title 6"));
+        cardDataList3.add(new Lyrics("Title 5"));
+        cardDataList3.add(new Lyrics("Title 6"));
+
+        RecyclerView recyclerView= findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new LyricsAdapter(cardDataList3));
+
+        int spaceInPixels = getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing);
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                // Apply spacing to each item
+                outRect.left = spaceInPixels;
+                outRect.right = spaceInPixels;
+                outRect.top = spaceInPixels;
+
+                // Avoid adding extra space at the bottom of the last item
+                if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+                    outRect.bottom = spaceInPixels;
+                }
+            }
+        });
+
+        Log.d("Spacing", "Spacing in pixels: " + getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing));
+
         stopRecordingButton = findViewById(R.id.button6);
         addRecordingButton = findViewById(R.id.button5);
         deleteSongButton = findViewById(R.id.button7);
+
         //playRecordingButton = findViewById(R.id.imageButton2);
         //pinButton = findViewById(R.id.imageButton7);
 
         filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
 
-        // Set up Add New Recording Button functionality
+
         addRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,12 +118,12 @@ public class ProjectActivity extends Activity {
         });
 
         // Set up Play Recording Button functionality
-        playRecordingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playRecording(); // Play the recording
-            }
-        });
+//        playRecordingButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                playRecording(); // Play the recording
+//            }
+//        });
 
         // Set up Delete Song Button functionality
         deleteSongButton.setOnClickListener(new View.OnClickListener() {
