@@ -48,7 +48,7 @@ public class ProfileActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_layout);
         db = FirebaseFirestore.getInstance();
-        userService = new UserService();
+        userService = UserService.getInstance();
         projectService = new ProjectService();
 
         edit_button = findViewById(R.id.edit_button);

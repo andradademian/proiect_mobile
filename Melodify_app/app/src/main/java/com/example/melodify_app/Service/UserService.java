@@ -16,7 +16,21 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserService implements Service<User> {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static UserService instance; // Singleton instance
+    private final FirebaseFirestore db; // Firebase instance
+
+    // Private constructor to prevent instantiation from other classes
+    private UserService() {
+        db = FirebaseFirestore.getInstance();
+    }
+
+    // Public method to provide access to the singleton instance
+    public static synchronized UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService();
+        }
+        return instance;
+    }
 
     @Override
     public void save(User user) {
@@ -25,24 +39,20 @@ public class UserService implements Service<User> {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-//                        Toast.makeText(activity.this, "Welcome!",
-//                                Toast.LENGTH_SHORT).show();
+                        Log.d("save", "User successfully added!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(SignUpActivity.this, "Error creating user!",
-//                                Toast.LENGTH_SHORT).show();
+                        Log.e("save", "Error adding user", e);
                     }
                 });
     }
 
     public void update(String email, String newName, String newPassword) {
-        // Hash the new password
         String hashedPassword = PasswordHash.hashPassword(newPassword);
 
-        // Update the Firestore document
         db.collection("users").document(email)
                 .update("name", newName, "password", hashedPassword)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -68,10 +78,10 @@ public class UserService implements Service<User> {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-//                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                Log.d("getAll", document.getId() + " => " + document.getData());
                             }
                         } else {
-//                                    Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w("getAll", "Error getting documents.", task.getException());
                         }
                     }
                 });
@@ -79,20 +89,15 @@ public class UserService implements Service<User> {
 
     @Override
     public void getById() {
-
+        // Implementation can be added here
     }
 
-
     public User getUserByEmail(String email) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Access the collection and get the document by email (used as the ID)
         db.collection("users")
-                .document(email)  // Assuming email is used as the document ID
+                .document(email)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        // Deserialize the document into a User object
                         User user = documentSnapshot.toObject(User.class);
                         if (user != null) {
                             Log.d("getUserByEmail", "User found: " + user.toString());
@@ -109,9 +114,8 @@ public class UserService implements Service<User> {
         return null;
     }
 
-
     @Override
     public void delete() {
-
+        // Implementation can be added here
     }
 }

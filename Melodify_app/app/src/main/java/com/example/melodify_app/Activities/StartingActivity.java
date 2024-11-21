@@ -19,7 +19,7 @@ public class StartingActivity extends Activity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(StartingActivity.this, ProjectActivity.class);
+                Intent intent = new Intent(StartingActivity.this, SignInActivity.class);
                 startActivity(intent);
                 finish(); // Close Starting activity so it's not in back stack
             }
