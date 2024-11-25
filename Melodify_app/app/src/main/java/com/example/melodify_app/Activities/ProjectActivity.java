@@ -24,6 +24,7 @@ import com.example.melodify_app.Model_Auxiliare.Lyrics;
 import com.example.melodify_app.Model_Auxiliare.LyricsAdapter;
 import com.example.melodify_app.Model_Auxiliare.ProjectCard;
 import com.example.melodify_app.Model_Auxiliare.ProjectCardAdapter;
+import com.example.melodify_app.Model_Auxiliare.SpaceItemDecoration;
 import com.example.melodify_app.R;
 
 import java.io.File;
@@ -70,23 +71,27 @@ public class ProjectActivity extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new LyricsAdapter(cardDataList3));
 
-        int spaceInPixels = getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing);
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                // Apply spacing to each item
-                outRect.left = spaceInPixels;
-                outRect.right = spaceInPixels;
-                outRect.top = spaceInPixels;
+        int spacing = 45; // 20dp
+        recyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
 
-                // Avoid adding extra space at the bottom of the last item
-                if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
-                    outRect.bottom = spaceInPixels;
-                }
-            }
-        });
 
-        Log.d("Spacing", "Spacing in pixels: " + getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing));
+//        int spaceInPixels = getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing);
+//        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+//                // Apply spacing to each item
+//                outRect.left = spaceInPixels;
+//                outRect.right = spaceInPixels;
+//                outRect.top = spaceInPixels;
+//
+//                // Avoid adding extra space at the bottom of the last item
+//                if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+//                    outRect.bottom = spaceInPixels;
+//                }
+//            }
+//        });
+//
+//        Log.d("Spacing", "Spacing in pixels: " + getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing));
 
         stopRecordingButton = findViewById(R.id.button6);
         addRecordingButton = findViewById(R.id.button5);
