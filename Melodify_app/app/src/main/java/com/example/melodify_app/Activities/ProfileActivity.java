@@ -80,7 +80,7 @@ public class ProfileActivity extends Activity {
                 }
             }
         });
-        // Set up RecyclerView
+
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new ProjectCardAdapter(cardDataList));

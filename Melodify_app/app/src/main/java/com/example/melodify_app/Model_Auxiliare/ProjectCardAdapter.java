@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.melodify_app.Activities.ProjectActivity;
 import com.example.melodify_app.R;
 
 import java.util.List;
@@ -36,14 +37,12 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
         holder.descriptionText.setText(cardData.getDescription());
 
         holder.itemView.setOnClickListener(v -> {
-            // Create an Intent to navigate to the Project activity
             Toast.makeText(v.getContext(),"slay",Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(v.getContext(), Project.class);
-
-            // Optionally pass data if needed
-            intent.putExtra("title", cardData.getTitle());
-            intent.putExtra("description", cardData.getDescription());
+            Intent intent = new Intent(v.getContext(), ProjectActivity.class);
+            //Project project=new Project(cardData.getId(), cardData.getTitle(), cardData.getDescription())
+            intent.putExtra("CARD", cardData);
+            //intent.putExtra("description", cardData.getDescription());
 
             v.getContext().startActivity(intent);
         });

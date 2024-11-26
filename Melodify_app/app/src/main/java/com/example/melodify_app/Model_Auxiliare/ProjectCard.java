@@ -1,6 +1,8 @@
 package com.example.melodify_app.Model_Auxiliare;
 
-public class ProjectCard {
+import java.io.Serializable;
+
+public class ProjectCard implements Serializable {
     private String id;
     private String title;
     private String description;
