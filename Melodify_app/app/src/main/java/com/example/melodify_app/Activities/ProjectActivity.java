@@ -53,6 +53,9 @@ public class ProjectActivity extends Activity {
         TextView songtitle = findViewById(R.id.textView3);
         songtitle.setText(project.getTitle());
 
+        TextView songdescripptioin = findViewById(R.id.song_description);
+        songdescripptioin.setText(project.getDescription());
+
 
 ////        List<AudioFile> cardDataList2 = new ArrayList<>();
 //        cardDataList2.add(new AudioFile("Title 1"));
