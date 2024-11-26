@@ -1,13 +1,11 @@
 package com.example.melodify_app.Model_Auxiliare;
 
-import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,14 +53,6 @@ public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.CardViewHo
             }
         });
 
-        // Handle item click to open a new activity, if needed
-        holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "slay", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(v.getContext(), Project.class);
-            intent.putExtra("title", cardData.getInput()); // Pass modified lyrics
-            v.getContext().startActivity(intent);
-        });
     }
 
     @Override
