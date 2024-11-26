@@ -40,9 +40,7 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
             Toast.makeText(v.getContext(),"slay",Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(v.getContext(), ProjectActivity.class);
-            //Project project=new Project(cardData.getId(), cardData.getTitle(), cardData.getDescription())
             intent.putExtra("CARD", cardData);
-            //intent.putExtra("description", cardData.getDescription());
 
             v.getContext().startActivity(intent);
         });
