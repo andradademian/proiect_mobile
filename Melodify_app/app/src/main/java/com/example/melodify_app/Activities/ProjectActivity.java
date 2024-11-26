@@ -63,12 +63,12 @@ public class ProjectActivity extends Activity {
 //        cardDataList2.add(new AudioFile("Title 4"));
 
         cardDataList3 = new ArrayList<>();
-        cardDataList3.add(new Lyrics("Title 5"));
-        cardDataList3.add(new Lyrics("Title 6"));
-        cardDataList3.add(new Lyrics("Title 5"));
-        cardDataList3.add(new Lyrics("Title 6"));
-        cardDataList3.add(new Lyrics("Title 5"));
-        cardDataList3.add(new Lyrics("Title 6"));
+        cardDataList3.add(new Lyrics(""));
+        cardDataList3.add(new Lyrics(""));
+        cardDataList3.add(new Lyrics(""));
+        cardDataList3.add(new Lyrics(""));
+        cardDataList3.add(new Lyrics(""));
+        cardDataList3.add(new Lyrics(""));
 
         RecyclerView recyclerView= findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
