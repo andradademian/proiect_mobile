@@ -3,13 +3,13 @@ package com.example.melodify_app.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,11 +19,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.melodify_app.Model_Auxiliare.AudioFile;
 import com.example.melodify_app.Model_Auxiliare.Lyrics;
 import com.example.melodify_app.Model_Auxiliare.LyricsAdapter;
 import com.example.melodify_app.Model_Auxiliare.ProjectCard;
-import com.example.melodify_app.Model_Auxiliare.ProjectCardAdapter;
 import com.example.melodify_app.Model_Auxiliare.SpaceItemDecoration;
 import com.example.melodify_app.R;
 
@@ -50,6 +48,11 @@ public class ProjectActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
+
+        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
+        TextView songtitle = findViewById(R.id.textView3);
+        songtitle.setText(project.getTitle());
+
 
 ////        List<AudioFile> cardDataList2 = new ArrayList<>();
 //        cardDataList2.add(new AudioFile("Title 1"));
