@@ -5,8 +5,8 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="424dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#FFFFCC"
         android:layout_margin="8dp"
@@ -16,7 +16,7 @@
 
         <EditText
             android:id="@+id/editTextLyrics"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Write Lyrics..."
