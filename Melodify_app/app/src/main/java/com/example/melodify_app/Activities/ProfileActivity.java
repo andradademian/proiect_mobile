@@ -35,63 +35,50 @@ import java.util.List;
 
 public class ProfileActivity extends Activity {
 
-    Button edit_button, new_hit_button;
-    List<ProjectCard> cardDataList;
-    User user;
+    private Button edit_button, new_hit_button;
+    private List<ProjectCard> cardDataList;
+    private User user;
 
-    FirebaseFirestore db;
-    UserService userService;
-    ProjectService projectService;
+    private FirebaseFirestore db;
+    private UserService userService;
+    private ProjectService projectService;
+    private ProjectCardAdapter adapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_layout);
+
+        // Initialize services
         db = FirebaseFirestore.getInstance();
         userService = UserService.getInstance();
         projectService = new ProjectService();
 
+        // Initialize UI components
         edit_button = findViewById(R.id.edit_button);
         new_hit_button = findViewById(R.id.new_hit_button);
+        recyclerView = findViewById(R.id.recycler_view);
         cardDataList = new ArrayList<>();
 
+        // Retrieve user object
         user = (User) getIntent().getSerializableExtra("USER");
         TextView username = findViewById(R.id.username);
         username.setText(user.getName());
 
-        db.collection("projects")
-                .whereEqualTo("userID", user.getEmail())
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot querySnapshot = task.getResult();
-                    for (DocumentSnapshot document : querySnapshot) {
-//                        String projectId = document.getId();
-                        String projectName = document.getString("name");  // Assuming there's a 'project_name' field
-//                        String userId = document.getString("user_id");  // Assuming there's a 'user_id' field
-                        String projectDescription = document.getString("description");  // Assuming there's a 'user_id' field
-                        ProjectCard projectCard = new ProjectCard(projectName, projectDescription);
-                        cardDataList.add(projectCard);
-                    }
-                    System.out.println("Projects retrieved: " + cardDataList.size());
-                } else {
-                    System.out.println("Error getting documents: " + task.getException());
-                }
-            }
-        });
-
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        // Set up RecyclerView and Adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ProjectCardAdapter(cardDataList));
-        recyclerView.requestLayout();
+        adapter = new ProjectCardAdapter(cardDataList);
+        recyclerView.setAdapter(adapter);
 
+        // Load projects for the user
+        loadProjects();
+
+        // Set button listeners
         edit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showEditDialog();
-                username.setText(user.getName());
-                recyclerView.requestLayout();
             }
         });
 
@@ -99,10 +86,37 @@ public class ProfileActivity extends Activity {
             @Override
             public void onClick(View v) {
                 showNewProjectDialog();
-                recyclerView.requestLayout();
             }
         });
     }
+
+    /**
+     * Fetches projects for the user from Firestore and updates the RecyclerView.
+     */
+    private void loadProjects() {
+        db.collection("projects")
+                .whereEqualTo("userID", user.getEmail())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            cardDataList.clear(); // Clear old data
+                            for (DocumentSnapshot document : querySnapshot) {
+                                String projectName = document.getString("name");
+                                String projectDescription = document.getString("description");
+                                ProjectCard projectCard = new ProjectCard(projectName, projectDescription);
+                                cardDataList.add(projectCard);
+                            }
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            System.out.println("Error getting documents: " + task.getException());
+                        }
+                    }
+                });
+    }
+
 
     private void showEditDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
@@ -123,24 +137,25 @@ public class ProfileActivity extends Activity {
                 user.setPassword(newPassword);
 
                 userService.update(user.getEmail(), user.getName(), user.getPassword());
-
                 Toast.makeText(ProfileActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
 
-                recreate();
+                // Update username on the screen
+                TextView username = findViewById(R.id.username);
+                username.setText(user.getName());
             } else {
                 Toast.makeText(ProfileActivity.this,
                         "Please enter both username and password", Toast.LENGTH_SHORT).show();
             }
         });
+
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
+
     private void showNewProjectDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
         builder.setTitle("Let's get it started!");
-
-        //TODO stuff here to initialise a new hit
 
         View view = getLayoutInflater().inflate(R.layout.new_hit_layout, null);
         builder.setView(view);
@@ -153,19 +168,18 @@ public class ProfileActivity extends Activity {
             String hDescription = hit_description.getText().toString();
 
             if (!hTitle.isEmpty()) {
-                // TODO redirect
                 Project newHit = new Project(hTitle, hDescription, user.getEmail());
-//                projectService.save(newHit);
                 db.collection("projects")
-                        .document(newHit.getUserID()+"_"+newHit.getName())
+                        .document(newHit.getUserID() + "_" + newHit.getName())
                         .set(newHit)
-//                        .add(newHit)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                        Toast.makeText(ProfileActivity.this,
-                                "New Song added!", Toast.LENGTH_SHORT).show();
-                                cardDataList.add(new ProjectCard(newHit.getName(),newHit.getDescription()));
+                                Toast.makeText(ProfileActivity.this,
+                                        "New Song added!", Toast.LENGTH_SHORT).show();
+                                cardDataList.add(new ProjectCard(newHit.getName(), newHit.getDescription()));
+                                adapter.notifyDataSetChanged(); // Update RecyclerView
+
                                 Intent intent = new Intent(ProfileActivity.this, ProjectActivity.class);
                                 intent.putExtra("NEW_HIT", newHit);
                                 startActivity(intent);
@@ -175,8 +189,8 @@ public class ProfileActivity extends Activity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ProfileActivity.this, "Error creating project!",
-                                Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, "Error creating project!",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -185,5 +199,4 @@ public class ProfileActivity extends Activity {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
-
 }
