@@ -30,28 +30,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 >
 
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/backbutton"
                     />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:text="SONG TITLE"
                 android:textColor="#000000"
-                android:textSize="25sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="60dp"/>
 
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/trashcan"
                     />
 
             </LinearLayout>
