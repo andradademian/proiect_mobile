@@ -34,13 +34,13 @@
                 >
 
                 <ImageButton
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/backbutton"
-                    />
+                    android:id="@+id/imageButton1"
+                    android:layout_width="52dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="18dp"
+                    android:background="@drawable/backbutton" />
 
-            <TextView
+                <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,9 +55,8 @@
                 <ImageButton
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/trashcan"
-                    />
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/trashcan" />
 
             </LinearLayout>
 
@@ -99,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#ef9f9f"
-                    android:text="Delete Song" />
+                    android:text="Add new lyrics" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

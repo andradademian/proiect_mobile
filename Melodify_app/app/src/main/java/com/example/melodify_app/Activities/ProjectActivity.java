@@ -2,6 +2,7 @@ package com.example.melodify_app.Activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -35,9 +36,11 @@ public class ProjectActivity extends Activity {
     private Button stopRecordingButton;
     List<Lyrics> cardDataList3;
     private Button addRecordingButton;
-    private Button deleteSongButton;
+    private Button addLyricsButton;
     private ImageButton playRecordingButton;
     private ImageButton pinButton;
+
+    private ImageButton backButton;
 
     private MediaRecorder mediaRecorder;
     private String filePath;
@@ -49,12 +52,12 @@ public class ProjectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
 
-        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
-        TextView songtitle = findViewById(R.id.textView3);
-        songtitle.setText(project.getTitle());
-
-        TextView songdescripptioin = findViewById(R.id.song_description);
-        songdescripptioin.setText(project.getDescription());
+//        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
+//        TextView songtitle = findViewById(R.id.textView3);
+//        songtitle.setText(project.getTitle());
+//
+//        TextView songdescripptioin = findViewById(R.id.song_description);
+//        songdescripptioin.setText(project.getDescription());
 
 
 ////        List<AudioFile> cardDataList2 = new ArrayList<>();
@@ -101,7 +104,9 @@ public class ProjectActivity extends Activity {
 
         stopRecordingButton = findViewById(R.id.button6);
         addRecordingButton = findViewById(R.id.button5);
-        deleteSongButton = findViewById(R.id.button7);
+        addLyricsButton = findViewById(R.id.button7);
+        backButton = findViewById(R.id.imageButton1);
+
 
         //playRecordingButton = findViewById(R.id.imageButton2);
         //pinButton = findViewById(R.id.imageButton7);
@@ -137,11 +142,17 @@ public class ProjectActivity extends Activity {
 //        });
 
         // Set up Delete Song Button functionality
-        deleteSongButton.setOnClickListener(new View.OnClickListener() {
+        addLyricsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteRecording(); // Delete the recorded file
             }
+        });
+
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProjectActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            finish(); // Optional: To prevent stacking activities
         });
     }
 
