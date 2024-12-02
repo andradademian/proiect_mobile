@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.melodify_app.Model_Auxiliare.Lyrics;
 import com.example.melodify_app.Model_Auxiliare.LyricsAdapter;
-import com.example.melodify_app.Model_Auxiliare.ProjectCard;
 import com.example.melodify_app.Model_Auxiliare.SpaceItemDecoration;
 import com.example.melodify_app.R;
 
@@ -152,7 +150,7 @@ public class ProjectActivity extends Activity {
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProjectActivity.this, ProfileActivity.class);
             startActivity(intent);
-            finish(); // Optional: To prevent stacking activities
+            finish();
         });
     }
 
