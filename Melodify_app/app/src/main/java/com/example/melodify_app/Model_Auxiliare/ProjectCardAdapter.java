@@ -41,7 +41,7 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
 
             Intent intent = new Intent(v.getContext(), ProjectActivity.class);
             intent.putExtra("CARD", cardData);
-
+            intent.putExtra("USER",cardData.getUser());
             v.getContext().startActivity(intent);
         });
     }

@@ -24,6 +24,7 @@ import com.example.melodify_app.Model_Auxiliare.Lyrics;
 import com.example.melodify_app.Model_Auxiliare.LyricsAdapter;
 import com.example.melodify_app.Model_Auxiliare.ProjectCard;
 import com.example.melodify_app.Model_Auxiliare.SpaceItemDecoration;
+import com.example.melodify_app.Model_Auxiliare.User;
 import com.example.melodify_app.R;
 
 import java.io.File;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectActivity extends Activity {
+    User user;
 
     private Button stopRecordingButton;
     List<Lyrics> cardDataList3;
@@ -52,12 +54,14 @@ public class ProjectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
 
-//        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
-//        TextView songtitle = findViewById(R.id.textView3);
-//        songtitle.setText(project.getTitle());
-//
-//        TextView songdescripptioin = findViewById(R.id.song_description);
-//        songdescripptioin.setText(project.getDescription());
+        user = (User) getIntent().getSerializableExtra("USER");
+
+        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
+        TextView songtitle = findViewById(R.id.textView3);
+        songtitle.setText(project.getTitle());
+
+        TextView songdescripptioin = findViewById(R.id.song_description);
+        songdescripptioin.setText(project.getDescription());
 
 
 ////        List<AudioFile> cardDataList2 = new ArrayList<>();
@@ -160,6 +164,7 @@ public class ProjectActivity extends Activity {
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProjectActivity.this, ProfileActivity.class);
+            intent.putExtra("USER", user);
             startActivity(intent);
             finish(); // Optional: To prevent stacking activities
         });

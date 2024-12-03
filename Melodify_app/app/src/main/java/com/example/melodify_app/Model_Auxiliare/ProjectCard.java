@@ -7,9 +7,16 @@ public class ProjectCard implements Serializable {
     private String title;
     private String description;
 
-    public ProjectCard(String title, String description) {
+    public User getUser() {
+        return user;
+    }
+
+    private User user;
+
+    public ProjectCard(String title, String description, User user) {
         this.title = title;
         this.description = description;
+        this.user=user;
     }
 
     public ProjectCard(String id, String title, String description) {

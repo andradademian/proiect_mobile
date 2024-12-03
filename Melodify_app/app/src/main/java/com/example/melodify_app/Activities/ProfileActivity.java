@@ -106,7 +106,7 @@ public class ProfileActivity extends Activity {
                             for (DocumentSnapshot document : querySnapshot) {
                                 String projectName = document.getString("name");
                                 String projectDescription = document.getString("description");
-                                ProjectCard projectCard = new ProjectCard(projectName, projectDescription);
+                                ProjectCard projectCard = new ProjectCard(projectName, projectDescription,user);
                                 cardDataList.add(projectCard);
                             }
                             adapter.notifyDataSetChanged();
@@ -177,11 +177,12 @@ public class ProfileActivity extends Activity {
                             public void onSuccess(Void unused) {
                                 Toast.makeText(ProfileActivity.this,
                                         "New Song added!", Toast.LENGTH_SHORT).show();
-                                cardDataList.add(new ProjectCard(newHit.getName(), newHit.getDescription()));
+                                cardDataList.add(new ProjectCard(newHit.getName(), newHit.getDescription(),user));
                                 adapter.notifyDataSetChanged(); // Update RecyclerView
 
                                 Intent intent = new Intent(ProfileActivity.this, ProjectActivity.class);
                                 intent.putExtra("NEW_HIT", newHit);
+                                intent.putExtra("USER", user);
                                 startActivity(intent);
                                 finish();
                             }
