@@ -73,8 +73,6 @@ public class ProjectActivity extends Activity {
         cardDataList3.add(new Lyrics(""));
         cardDataList3.add(new Lyrics(""));
         cardDataList3.add(new Lyrics(""));
-        cardDataList3.add(new Lyrics(""));
-        cardDataList3.add(new Lyrics(""));
 
         RecyclerView recyclerView= findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -145,9 +143,20 @@ public class ProjectActivity extends Activity {
         addLyricsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteRecording(); // Delete the recorded file
+                // Add a new Lyrics object to the list
+                cardDataList3.add(new Lyrics(""));
+
+                // Notify the adapter that the data has changed
+                RecyclerView.Adapter adapter = recyclerView.getAdapter();
+                if (adapter != null) {
+                    adapter.notifyItemInserted(cardDataList3.size() - 1);
+                }
+
+                // Scroll to the bottom to show the new card (optional)
+                recyclerView.scrollToPosition(cardDataList3.size() - 1);
             }
         });
+
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProjectActivity.this, ProfileActivity.class);
