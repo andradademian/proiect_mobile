@@ -36,9 +36,11 @@
                 <ImageButton
                     android:id="@+id/imageButton1"
                     android:layout_width="52dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="18dp"
-                    android:background="@drawable/backbutton" />
+                    android:layout_height="52dp"
+                    android:layout_marginLeft="35dp"
+                    android:background="@drawable/backbutton"
+                    />
+
 
                 <TextView
                 android:id="@+id/textView3"
@@ -53,9 +55,9 @@
                 android:layout_marginHorizontal="60dp"/>
 
                 <ImageButton
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_marginRight="30dp"
                     android:background="@drawable/trashcan" />
 
             </LinearLayout>
@@ -78,27 +80,48 @@
                 android:layout_marginTop="16dp">
 
                 <Button
-                    android:id="@+id/button6"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/recordAdd"
+                    android:layout_width="135dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#ef9f9f"
-                    android:text="Stop recording" />
+                    android:text="Add recording"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp" />
 
                 <Button
-                    android:id="@+id/button5"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/textAdd"
+                    android:layout_width="135dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:background="#ef9f9f"
-                    android:text="Add new recording" />
+                    android:text="Add text"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"/>
 
-                <Button
-                    android:id="@+id/button7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#ef9f9f"
-                    android:text="Add new lyrics" />
+                <!--                    android:id="@+id/button6"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="#ef9f9f"-->
+<!--                    android:text="Stop recording" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/button5"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:background="#ef9f9f"-->
+<!--                    android:text="Add new recording" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/button7"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="#ef9f9f"-->
+<!--                    android:text="Add new lyrics" />-->
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

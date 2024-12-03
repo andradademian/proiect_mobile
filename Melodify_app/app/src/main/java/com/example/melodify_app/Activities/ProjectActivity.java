@@ -104,9 +104,11 @@ public class ProjectActivity extends Activity {
 //
 //        Log.d("Spacing", "Spacing in pixels: " + getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing));
 
-        stopRecordingButton = findViewById(R.id.button6);
-        addRecordingButton = findViewById(R.id.button5);
-        addLyricsButton = findViewById(R.id.button7);
+        addRecordingButton=findViewById(R.id.recordAdd);
+        addLyricsButton=findViewById(R.id.textAdd);
+//        stopRecordingButton = findViewById(R.id.button6);
+//        addRecordingButton = findViewById(R.id.button5);
+//        addLyricsButton = findViewById(R.id.button7);
         backButton = findViewById(R.id.imageButton1);
 
 
@@ -127,13 +129,14 @@ public class ProjectActivity extends Activity {
             }
         });
 
-        // Set up Stop Recording Button functionality
-        stopRecordingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopRecording(); // Stop the recording
-            }
-        });
+        //TODO this shit
+        // Set up Stop Recording Button functionalityw
+//        stopRecordingButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                stopRecording(); // Stop the recording
+//            }
+//        });
 
         // Set up Play Recording Button functionality
 //        playRecordingButton.setOnClickListener(new View.OnClickListener() {
