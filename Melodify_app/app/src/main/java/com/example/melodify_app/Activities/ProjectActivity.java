@@ -117,12 +117,12 @@ public class ProjectActivity extends Activity {
 
         filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
 
-
         addRecordingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkPermissions()) {
                     startRecording(); // Start recording if permissions are granted
+                    addRecordingButton.setText("Stop Recording!");
                 } else {
                     requestPermissions(); // Request necessary permissions
                 }
