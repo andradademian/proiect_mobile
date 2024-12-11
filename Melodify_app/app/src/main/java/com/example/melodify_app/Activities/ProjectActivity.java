@@ -20,9 +20,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.melodify_app.Model_Auxiliare.AudioFile;
 import com.example.melodify_app.Model_Auxiliare.Lyrics;
 import com.example.melodify_app.Model_Auxiliare.LyricsAdapter;
 import com.example.melodify_app.Model_Auxiliare.ProjectCard;
+import com.example.melodify_app.Model_Auxiliare.RegistrationCardAdapter;
 import com.example.melodify_app.Model_Auxiliare.SpaceItemDecoration;
 import com.example.melodify_app.Model_Auxiliare.User;
 import com.example.melodify_app.R;
@@ -30,13 +32,16 @@ import com.example.melodify_app.R;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProjectActivity extends Activity {
     User user;
 
     private Button stopRecordingButton;
-    List<Lyrics> cardDataList3;
+    List<Lyrics> lyricsCards;
+
+    List<AudioFile> registrationCards;
     private Button addRecordingButton;
     private Button addLyricsButton;
     private ImageButton playRecordingButton;
@@ -54,14 +59,14 @@ public class ProjectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
 
-        user = (User) getIntent().getSerializableExtra("USER");
-
-        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
-        TextView songtitle = findViewById(R.id.textView3);
-        songtitle.setText(project.getTitle());
-
-        TextView songdescripptioin = findViewById(R.id.song_description);
-        songdescripptioin.setText(project.getDescription());
+       // user = (User) getIntent().getSerializableExtra("USER");
+//
+//        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
+//        TextView songtitle = findViewById(R.id.textView3);
+//        songtitle.setText(project.getTitle());
+//
+//        TextView songdescripptioin = findViewById(R.id.song_description);
+//        songdescripptioin.setText(project.getDescription());
 
 
 ////        List<AudioFile> cardDataList2 = new ArrayList<>();
@@ -72,18 +77,33 @@ public class ProjectActivity extends Activity {
 //        cardDataList2.add(new AudioFile("Title 3"));
 //        cardDataList2.add(new AudioFile("Title 4"));
 
-        cardDataList3 = new ArrayList<>();
-        cardDataList3.add(new Lyrics(""));
-        cardDataList3.add(new Lyrics(""));
-        cardDataList3.add(new Lyrics(""));
-        cardDataList3.add(new Lyrics(""));
 
-        RecyclerView recyclerView= findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new LyricsAdapter(cardDataList3));
 
-        int spacing = 45; // 20dp
-        recyclerView.addItemDecoration(new SpaceItemDecoration(spacing));
+        registrationCards = new ArrayList<>();
+        lyricsCards = new ArrayList<>();
+
+
+        lyricsCards.add(new Lyrics(""));
+        lyricsCards.add(new Lyrics(""));
+        lyricsCards.add(new Lyrics(""));
+        lyricsCards.add(new Lyrics(""));// Add the Lyrics data you want here
+
+        RecyclerView recyclerViewLyrics = findViewById(R.id.recycler_view);
+        recyclerViewLyrics.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewLyrics.setAdapter(new LyricsAdapter(lyricsCards));
+
+        int spacing = 45; // Adjust the spacing as needed
+        recyclerViewLyrics.addItemDecoration(new SpaceItemDecoration(spacing));
+
+        registrationCards.add(new AudioFile(""));  // Add the appropriate data for registration cards
+
+        RecyclerView recyclerViewRegistration = findViewById(R.id.recycler_registration);
+        recyclerViewRegistration.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewRegistration.setAdapter(new RegistrationCardAdapter(registrationCards));
+
+        recyclerViewRegistration.addItemDecoration(new SpaceItemDecoration(spacing));
+
+
 
 
 //        int spaceInPixels = getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing);
@@ -151,16 +171,16 @@ public class ProjectActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // Add a new Lyrics object to the list
-                cardDataList3.add(new Lyrics(""));
+                lyricsCards.add(new Lyrics(""));
 
                 // Notify the adapter that the data has changed
-                RecyclerView.Adapter adapter = recyclerView.getAdapter();
+                RecyclerView.Adapter adapter = recyclerViewLyrics.getAdapter();
                 if (adapter != null) {
-                    adapter.notifyItemInserted(cardDataList3.size() - 1);
+                    adapter.notifyItemInserted(lyricsCards.size() - 1);
                 }
 
                 // Scroll to the bottom to show the new card (optional)
-                recyclerView.scrollToPosition(cardDataList3.size() - 1);
+                recyclerViewLyrics.scrollToPosition(lyricsCards.size() - 1);
             }
         });
 
