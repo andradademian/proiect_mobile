@@ -59,7 +59,7 @@ public class ProjectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
 
-       // user = (User) getIntent().getSerializableExtra("USER");
+        // user = (User) getIntent().getSerializableExtra("USER");
 //
 //        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
 //        TextView songtitle = findViewById(R.id.textView3);

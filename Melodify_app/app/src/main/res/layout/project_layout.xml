@@ -79,22 +79,31 @@
                 android:layout_marginTop="16dp">
 
                 <Button
+                    android:id="@+id/saveSong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="#ef9f9f"
+                    android:text="Save Song" />
+
+                <Button
                     android:id="@+id/recordAdd"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="#ef9f9f"
-                    android:text="Add recording"
-                    android:layout_marginEnd="10dp" />
+                    android:text="Add recording" />
 
                 <Button
                     android:id="@+id/textAdd"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="#ef9f9f"
-                    android:text="Add text"
-                    android:layout_marginStart="10dp" />
+                    android:text="Add text" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
