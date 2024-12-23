@@ -1,18 +1,23 @@
 package com.example.melodify_app.Model_Auxiliare;
 
 public class Lyrics {
-    public Lyrics(String input) {
-        this.input = input;
+    private String text;
+    private String projectId;
+
+    public Lyrics() {
+        // Required empty constructor for Firestore
     }
 
-    public String getInput() {
-        return input;
+    public Lyrics(String text, String projectId) {
+        this.text = text;
+        this.projectId = projectId;
     }
 
-    public void setInput(String input) {
-        this.input = input;
+    public String getText() {
+        return text;
     }
 
-    String input;
-
+    public void setText(String text) {
+        this.text = text;
+    }
 }

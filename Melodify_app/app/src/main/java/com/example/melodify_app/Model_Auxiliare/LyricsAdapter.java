@@ -32,7 +32,7 @@ public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.CardViewHo
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         Lyrics cardData = dataList.get(position);
-        holder.input.setText(cardData.getInput()); // Display the initial lyrics
+        holder.input.setText(cardData.getText()); // Display the initial lyrics
 
         // Adding a TextWatcher to update the Lyrics object when the text changes
         holder.input.addTextChangedListener(new TextWatcher() {
@@ -44,7 +44,7 @@ public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.CardViewHo
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int after) {
                 // Update the Lyrics object with the new text
-                cardData.setInput(charSequence.toString());
+                cardData.setText(charSequence.toString());
             }
 
             @Override

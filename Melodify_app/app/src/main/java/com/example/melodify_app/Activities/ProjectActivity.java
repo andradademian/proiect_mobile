@@ -28,11 +28,13 @@ import com.example.melodify_app.Model_Auxiliare.RegistrationCardAdapter;
 import com.example.melodify_app.Model_Auxiliare.SpaceItemDecoration;
 import com.example.melodify_app.Model_Auxiliare.User;
 import com.example.melodify_app.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProjectActivity extends Activity {
@@ -40,183 +42,145 @@ public class ProjectActivity extends Activity {
 
     private Button stopRecordingButton;
     List<Lyrics> lyricsCards;
-
     List<AudioFile> registrationCards;
+
     private Button addRecordingButton;
     private Button addLyricsButton;
+    private Button saveSongButton;  // Added Save Song Button
     private ImageButton playRecordingButton;
     private ImageButton pinButton;
-
     private ImageButton backButton;
 
+    private RecyclerView recyclerViewLyrics;
+    private LyricsAdapter lyricsAdapter;
     private MediaRecorder mediaRecorder;
     private String filePath;
     private boolean isRecording = false;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1000;
+
+    private FirebaseFirestore db;
+    private CollectionReference lyricsCollection;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
 
-        // user = (User) getIntent().getSerializableExtra("USER");
-//
-//        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
-//        TextView songtitle = findViewById(R.id.textView3);
-//        songtitle.setText(project.getTitle());
-//
-//        TextView songdescripptioin = findViewById(R.id.song_description);
-//        songdescripptioin.setText(project.getDescription());
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
+        lyricsCollection = db.collection("project_component");
 
+        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
+        TextView songtitle = findViewById(R.id.textView3);
+        songtitle.setText(project.getTitle());
 
-////        List<AudioFile> cardDataList2 = new ArrayList<>();
-//        cardDataList2.add(new AudioFile("Title 1"));
-//        cardDataList2.add(new AudioFile("Title 2"));
-//        cardDataList2.add(new AudioFile("Title 3"));
-//        cardDataList2.add(new AudioFile("Title 4"));
-//        cardDataList2.add(new AudioFile("Title 3"));
-//        cardDataList2.add(new AudioFile("Title 4"));
-
-
+        String projectId = project.getId();
+        TextView songdescription = findViewById(R.id.song_description);
+        songdescription.setText(project.getDescription());
 
         registrationCards = new ArrayList<>();
         lyricsCards = new ArrayList<>();
 
-
-        lyricsCards.add(new Lyrics(""));
-        lyricsCards.add(new Lyrics(""));
-        lyricsCards.add(new Lyrics(""));
-        lyricsCards.add(new Lyrics(""));// Add the Lyrics data you want here
-
-        RecyclerView recyclerViewLyrics = findViewById(R.id.recycler_view);
+        // Initialize RecyclerView for Lyrics
+        recyclerViewLyrics = findViewById(R.id.recycler_view);
         recyclerViewLyrics.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewLyrics.setAdapter(new LyricsAdapter(lyricsCards));
+        lyricsAdapter = new LyricsAdapter(lyricsCards);
+        recyclerViewLyrics.setAdapter(lyricsAdapter);
 
         int spacing = 45; // Adjust the spacing as needed
         recyclerViewLyrics.addItemDecoration(new SpaceItemDecoration(spacing));
 
-        registrationCards.add(new AudioFile(""));  // Add the appropriate data for registration cards
+       // registrationCards.add(new AudioFile(""));  // Add data for registration cards
 
         RecyclerView recyclerViewRegistration = findViewById(R.id.recycler_registration);
         recyclerViewRegistration.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewRegistration.setAdapter(new RegistrationCardAdapter(registrationCards));
-
         recyclerViewRegistration.addItemDecoration(new SpaceItemDecoration(spacing));
 
-
-
-
-//        int spaceInPixels = getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing);
-//        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-//            @Override
-//            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-//                // Apply spacing to each item
-//                outRect.left = spaceInPixels;
-//                outRect.right = spaceInPixels;
-//                outRect.top = spaceInPixels;
-//
-//                // Avoid adding extra space at the bottom of the last item
-//                if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
-//                    outRect.bottom = spaceInPixels;
-//                }
-//            }
-//        });
-//
-//        Log.d("Spacing", "Spacing in pixels: " + getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing));
-
-        addRecordingButton=findViewById(R.id.recordAdd);
-        addLyricsButton=findViewById(R.id.textAdd);
-//        stopRecordingButton = findViewById(R.id.button6);
-//        addRecordingButton = findViewById(R.id.button5);
-//        addLyricsButton = findViewById(R.id.button7);
+        addRecordingButton = findViewById(R.id.recordAdd);
+        addLyricsButton = findViewById(R.id.textAdd);
+        saveSongButton = findViewById(R.id.saveSong);  // Added Save Song Button
         backButton = findViewById(R.id.imageButton1);
-
-
-        //playRecordingButton = findViewById(R.id.imageButton2);
-        //pinButton = findViewById(R.id.imageButton7);
 
         filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
 
-        addRecordingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkPermissions()) {
-                    startRecording(); // Start recording if permissions are granted
-                    addRecordingButton.setText("Stop Recording!");
-                } else {
-                    requestPermissions(); // Request necessary permissions
-                }
+        addRecordingButton.setOnClickListener(v -> {
+            if (checkPermissions()) {
+                startRecording();
+                addRecordingButton.setText("Stop Recording!");
+            } else {
+                requestPermissions();
             }
         });
 
-        //TODO this shit
-        // Set up Stop Recording Button functionalityw
-//        stopRecordingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                stopRecording(); // Stop the recording
-//            }
-//        });
-
-        // Set up Play Recording Button functionality
-//        playRecordingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                playRecording(); // Play the recording
-//            }
-//        });
-
-        // Set up Delete Song Button functionality
-        addLyricsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Add a new Lyrics object to the list
-                lyricsCards.add(new Lyrics(""));
-
-                // Notify the adapter that the data has changed
-                RecyclerView.Adapter adapter = recyclerViewLyrics.getAdapter();
-                if (adapter != null) {
-                    adapter.notifyItemInserted(lyricsCards.size() - 1);
-                }
-
-                // Scroll to the bottom to show the new card (optional)
-                recyclerViewLyrics.scrollToPosition(lyricsCards.size() - 1);
-            }
+        addLyricsButton.setOnClickListener(v -> {
+            lyricsCards.add(new Lyrics("", project.getId()));
+            lyricsAdapter.notifyItemInserted(lyricsCards.size() - 1);
+            recyclerViewLyrics.scrollToPosition(lyricsCards.size() - 1);
         });
 
+        saveSongButton.setOnClickListener(v -> saveLyricsToDatabase());
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProjectActivity.this, ProfileActivity.class);
             intent.putExtra("USER", user);
             startActivity(intent);
-            finish(); // Optional: To prevent stacking activities
+            finish();
         });
+
+        // Load saved lyrics from Firestore
+        loadLyricsFromDatabase(projectId);
     }
 
-    // Check if the required permissions are granted
+    private void saveLyricsToDatabase() {
+        ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
+        String projectId = project.getId();
+
+        for (Lyrics lyric : lyricsCards) {
+            String text = lyric.getText();
+
+            // Save with project ID
+            lyricsCollection.add(new Lyrics(text, projectId))
+                    .addOnSuccessListener(documentReference -> Log.d("Firestore", "Lyrics saved for project: " + projectId))
+                    .addOnFailureListener(e -> Log.e("Firestore Error", "Error saving lyrics: ", e));
+        }
+
+        Toast.makeText(ProjectActivity.this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
+
+        // Reload lyrics after saving
+        loadLyricsFromDatabase(projectId);
+    }
+
+
+    private void loadLyricsFromDatabase(String projectId) {
+        lyricsCollection.whereEqualTo("projectId", projectId) // Filter by projectId
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        lyricsCards.clear();
+
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String text = document.getString("text");
+                            lyricsCards.add(new Lyrics(text, projectId)); // Add lyrics to the list
+                        }
+
+                        lyricsAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.e("Firestore Error", "Error loading lyrics: ", task.getException());
+                    }
+                });
+    }
+
+
     private boolean checkPermissions() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    // Request audio recording and storage permissions
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_RECORD_AUDIO_PERMISSION);
     }
 
-    // Handle the result of the permission request
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startRecording();
-            } else {
-                Toast.makeText(this, "Permissions are required to record audio", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // Start the audio recording
     private void startRecording() {
         if (isRecording) {
             Toast.makeText(this, "Recording is already in progress", Toast.LENGTH_SHORT).show();
@@ -225,72 +189,27 @@ public class ProjectActivity extends Activity {
 
         try {
             mediaRecorder = new MediaRecorder();
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); // Set the audio source (microphone)
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP); // Output format
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB); // Audio encoder
-            mediaRecorder.setOutputFile(filePath); // Path to save the recording
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mediaRecorder.setOutputFile(filePath);
 
-            mediaRecorder.prepare(); // Prepare the recorder
-            mediaRecorder.start(); // Start recording
+            mediaRecorder.prepare();
+            mediaRecorder.start();
             isRecording = true;
 
             Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
-            Log.i("Recording Status", "Recording started successfully");
-        } catch (IOException e) {
+        } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
             Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show();
-            Log.e("Recording Error", "Error while preparing or starting recording: " + e.getMessage());
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Recording setup error", Toast.LENGTH_SHORT).show();
-            Log.e("Recording Error", "IllegalStateException: " + e.getMessage());
         }
     }
 
-    // Stop the audio recording
-    private void stopRecording() {
-        if (mediaRecorder != null && isRecording) {
-            try {
-                mediaRecorder.stop();
-                mediaRecorder.release();
-                mediaRecorder = null;
-                isRecording = false;
-
-                Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
-                Log.i("Recording Status", "Recording stopped successfully");
-            } catch (RuntimeException e) {
-                Log.e("Recording Error", "Error while stopping recording: " + e.getMessage());
-                Toast.makeText(this, "Failed to stop recording", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this, "No recording is in progress", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // Play the recorded audio
-    private void playRecording() {
-        // Placeholder for playing the recorded audio using MediaPlayer
-        Toast.makeText(this, "Playing recording", Toast.LENGTH_SHORT).show();
-    }
-
-    // Delete the recorded file
-    private void deleteRecording() {
-        File file = new File(filePath);
-        if (file.exists()) {
-            if (file.delete()) {
-                Toast.makeText(this, "Recording deleted", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Failed to delete recording", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // Release resources when done with recording
     @Override
     protected void onStop() {
         super.onStop();
         if (mediaRecorder != null) {
-            mediaRecorder.release(); // Release the media recorder
+            mediaRecorder.release();
             mediaRecorder = null;
         }
     }
