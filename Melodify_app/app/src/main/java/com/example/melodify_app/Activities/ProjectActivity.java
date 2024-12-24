@@ -7,13 +7,11 @@ import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -32,10 +30,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProjectActivity extends Activity {
     User user;
@@ -74,7 +73,7 @@ public class ProjectActivity extends Activity {
         TextView songtitle = findViewById(R.id.textView3);
         songtitle.setText(project.getTitle());
 
-        String projectId = project.getId();
+        String projectID = project.getUser().getEmail() + "_" + project.getTitle();
         TextView songdescription = findViewById(R.id.song_description);
         songdescription.setText(project.getDescription());
 
@@ -114,7 +113,7 @@ public class ProjectActivity extends Activity {
         });
 
         addLyricsButton.setOnClickListener(v -> {
-            lyricsCards.add(new Lyrics("", project.getId()));
+            lyricsCards.add(new Lyrics("", projectID));
             lyricsAdapter.notifyItemInserted(lyricsCards.size() - 1);
             recyclerViewLyrics.scrollToPosition(lyricsCards.size() - 1);
         });
@@ -129,47 +128,78 @@ public class ProjectActivity extends Activity {
         });
 
         // Load saved lyrics from Firestore
-        loadLyricsFromDatabase(projectId);
+        loadLyricsFromDatabase(projectID);
     }
 
+    private Integer findIndexPosition(String projectId){
+        int count=0;
+        for( Lyrics lyrics: lyricsCards){
+            if(lyrics.getProjectID().equals(projectId))
+                count++;
+        }
+        return count;
+    }
     private void saveLyricsToDatabase() {
+        // Get the ProjectCard and construct the project ID
         ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
-        String projectId = project.getId();
-
+        String projectID = project.getUser().getEmail() + "_" + project.getTitle(); // Construct project_id
         for (Lyrics lyric : lyricsCards) {
             String text = lyric.getText();
+            if (!text.trim().isEmpty()) { // Only save if the lyric has content
+                // Set the project_id in the Lyrics object
+                lyric.setProjectID(projectID);
+                Integer index;
+                if(lyric.getIndex()==null || lyric.getIndex()==0){
+                     index= findIndexPosition(projectID);
+                }
+                else{
+                    index= lyric.getIndex();
+                }
+                Log.d("IndexDebug", "Index value: " + index);
+                // Create a HashMap to explicitly include the fields to save
+                Map<String, Object> lyricData = new HashMap<>();
+                lyricData.put("text", lyric.getText());
+                lyricData.put("projectID", projectID); // Add project_id as a field
+                lyricData.put("index", index); // Add project_id as a field
+               // lyricData.put("timestamp", System.currentTimeMillis()); // Optional: add a timestamp
 
-            // Save with project ID
-            lyricsCollection.add(new Lyrics(text, projectId))
-                    .addOnSuccessListener(documentReference -> Log.d("Firestore", "Lyrics saved for project: " + projectId))
-                    .addOnFailureListener(e -> Log.e("Firestore Error", "Error saving lyrics: ", e));
+                // Save to Firestore with explicit document ID
+                db.collection("project_component")
+                        .document(projectID+"_"+index) // Unique ID for the lyric
+                        .set(lyricData)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d("Firestore", "Lyrics saved for project: " + projectID);
+                        })
+                        .addOnFailureListener(e -> Log.e("Firestore Error", "Error saving lyrics: ", e));
+            }
         }
 
         Toast.makeText(ProjectActivity.this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
 
         // Reload lyrics after saving
-        loadLyricsFromDatabase(projectId);
+        loadLyricsFromDatabase(projectID);
     }
 
 
-    private void loadLyricsFromDatabase(String projectId) {
-        lyricsCollection.whereEqualTo("projectId", projectId) // Filter by projectId
+
+    private void loadLyricsFromDatabase(String projectID) {
+        db.collection("project_component")
+                .whereEqualTo("projectID", projectID) // Filter by project_id
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        lyricsCards.clear();
+                .addOnSuccessListener(querySnapshot -> {
+                    lyricsCards.clear(); // Clear existing data
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        Lyrics lyric = document.toObject(Lyrics.class);
+                        Log.d("ProjectActivity", document.toString());
+                        Log.d("ProjectActivity", lyric.toString());
 
-                        for (DocumentSnapshot document : task.getResult()) {
-                            String text = document.getString("text");
-                            lyricsCards.add(new Lyrics(text, projectId)); // Add lyrics to the list
-                        }
-
-                        lyricsAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.e("Firestore Error", "Error loading lyrics: ", task.getException());
+                        lyricsCards.add(lyric);
                     }
-                });
+                    lyricsAdapter.notifyDataSetChanged(); // Update RecyclerView
+                })
+                .addOnFailureListener(e -> Log.e("Firestore Error", "Error fetching lyrics: ", e));
     }
+
 
 
     private boolean checkPermissions() {
