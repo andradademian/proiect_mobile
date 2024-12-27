@@ -63,12 +63,22 @@
             <!-- Song Description -->
             <TextView
                 android:id="@+id/song_description"
+                android:text="description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_margin="7dp"
                 android:textColor="@color/black"
                 android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/saveSong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="#ef9f9f"
+                android:text="Save Song" />
 
             <!-- Buttons -->
             <LinearLayout
@@ -77,15 +87,6 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_marginTop="16dp">
-
-                <Button
-                    android:id="@+id/saveSong"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:background="#ef9f9f"
-                    android:text="Save Song" />
 
                 <Button
                     android:id="@+id/recordAdd"
