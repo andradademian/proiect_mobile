@@ -69,6 +69,7 @@ public class ProjectActivity extends Activity {
         db = FirebaseFirestore.getInstance();
         lyricsCollection = db.collection("project_component");
 
+        user = (User) getIntent().getSerializableExtra("USER");
         ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
         TextView songtitle = findViewById(R.id.textView3);
         songtitle.setText(project.getTitle());
