@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.google.firebase.firestore.WriteBatch;
 
 public class ProjectActivity extends Activity {
     User user;
@@ -141,45 +142,67 @@ public class ProjectActivity extends Activity {
         return count;
     }
     private void saveLyricsToDatabase() {
+        // Initialize Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         // Get the ProjectCard and construct the project ID
         ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
         String projectID = project.getUser().getEmail() + "_" + project.getTitle(); // Construct project_id
-        for (Lyrics lyric : lyricsCards) {
+
+        // Firestore batch write instance
+        WriteBatch batch = db.batch();
+
+        // Loop through the lyricsCards to validate and add to the batch
+        for (int i = 0; i < lyricsCards.size(); i++) {
+            Lyrics lyric = lyricsCards.get(i);
             String text = lyric.getText();
+
             if (!text.trim().isEmpty()) { // Only save if the lyric has content
-                // Set the project_id in the Lyrics object
-                lyric.setProjectID(projectID);
                 Integer index;
-                if(lyric.getIndex()==null || lyric.getIndex()==0){
-                     index= findIndexPosition(projectID);
+
+                // Generate a unique index for each lyric object
+                if (lyric.getIndex() == null || lyric.getIndex() == 0) {
+                    index = i + 1; // Use the loop index + 1 to generate a unique index
+                } else {
+                    index = lyric.getIndex();
                 }
-                else{
-                    index= lyric.getIndex();
-                }
-                Log.d("IndexDebug", "Index value: " + index);
-                // Create a HashMap to explicitly include the fields to save
+
+                // Set the project ID and index on the lyric object
+                lyric.setProjectID(projectID);
+                lyric.setIndex(index);
+
+                // Create a HashMap to explicitly define fields
                 Map<String, Object> lyricData = new HashMap<>();
                 lyricData.put("text", lyric.getText());
-                lyricData.put("projectID", projectID); // Add project_id as a field
-                lyricData.put("index", index); // Add project_id as a field
-               // lyricData.put("timestamp", System.currentTimeMillis()); // Optional: add a timestamp
+                lyricData.put("projectID", projectID);
+                lyricData.put("index", index);
 
-                // Save to Firestore with explicit document ID
-                db.collection("project_component")
-                        .document(projectID+"_"+index) // Unique ID for the lyric
-                        .set(lyricData)
-                        .addOnSuccessListener(aVoid -> {
-                            Log.d("Firestore", "Lyrics saved for project: " + projectID);
-                        })
-                        .addOnFailureListener(e -> Log.e("Firestore Error", "Error saving lyrics: ", e));
+                // Define the Firestore document ID (unique for each lyric)
+                String documentID = projectID + "_" + index + "_" + System.currentTimeMillis(); // Add timestamp for uniqueness
+
+                // Add the lyric data to the batch
+                batch.set(db.collection("project_component").document(documentID), lyricData);
+
+                // Debug logging
+                Log.d("BatchDebug", "Added to batch: " + documentID);
             }
         }
 
-        Toast.makeText(ProjectActivity.this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
-
-        // Reload lyrics after saving
-        loadLyricsFromDatabase(projectID);
+        // Commit the batch write
+        batch.commit()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Batch write successful");
+                    Toast.makeText(ProjectActivity.this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
+                    // Reload lyrics after saving
+                    loadLyricsFromDatabase(projectID);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore Error", "Batch write failed", e);
+                    Toast.makeText(ProjectActivity.this, "Failed to save lyrics!", Toast.LENGTH_SHORT).show();
+                });
     }
+
+
 
 
 
