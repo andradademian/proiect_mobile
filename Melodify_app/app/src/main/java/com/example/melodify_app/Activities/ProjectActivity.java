@@ -40,16 +40,12 @@ import java.util.Map;
 public class ProjectActivity extends Activity {
     User user;
 
-    private Button stopRecordingButton;
     List<Lyrics> lyricsCards;
     List<AudioFile> registrationCards;
 
-    private Button addRecordingButton;
-    private Button addLyricsButton;
-    private Button saveSongButton;  // Added Save Song Button
-    private ImageButton playRecordingButton;
-    private ImageButton pinButton;
-    private ImageButton backButton;
+    private Button saveSongButton, addRecordingButton, addLyricsButton;
+    private ImageButton playRecordingButton,pinButton;
+    private ImageButton backButton,deleteHit;
 
     private RecyclerView recyclerViewLyrics;
     private LyricsAdapter lyricsAdapter;
@@ -100,8 +96,9 @@ public class ProjectActivity extends Activity {
 
         addRecordingButton = findViewById(R.id.recordAdd);
         addLyricsButton = findViewById(R.id.textAdd);
-        saveSongButton = findViewById(R.id.saveSong);  // Added Save Song Button
+        saveSongButton = findViewById(R.id.saveSong);
         backButton = findViewById(R.id.imageButton1);
+        deleteHit = findViewById(R.id.deleteHit);
 
         filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
 
@@ -122,13 +119,45 @@ public class ProjectActivity extends Activity {
 
         saveSongButton.setOnClickListener(v -> saveLyricsToDatabase());
 
-        backButton.setOnClickListener(v -> {
+        deleteHit.setOnClickListener(v->{
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            db.collection("project_component")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            String documentId = document.getId();
+                            if (documentId.matches("^" + projectID + ".*$")) {
+                                document.getReference().delete();
+                            }
+                        }
+                    });
+//                    .addOnFailureListener(e -> {
+//                        System.out.println("Error getting documents: " + e.getMessage());
+//                    });
+
+            db.collection("projects")
+                    .document(projectID)
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(this, "Item deleted successfully", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error deleting item", Toast.LENGTH_SHORT).show();
+                    });
+
             Intent intent = new Intent(ProjectActivity.this, ProfileActivity.class);
             intent.putExtra("USER", user);
             startActivity(intent);
             finish();
         });
 
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProjectActivity.this, ProfileActivity.class);
+            intent.putExtra("USER", user);
+            startActivity(intent);
+            finish();
+        });
         // Load saved lyrics from Firestore
         loadLyricsFromDatabase(projectID);
     }

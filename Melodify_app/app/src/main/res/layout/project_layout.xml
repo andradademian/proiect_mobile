@@ -54,6 +54,7 @@
                     android:layout_marginHorizontal="60dp" />
 
                 <ImageButton
+                    android:id="@+id/deleteHit"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     android:layout_marginEnd="30dp"
