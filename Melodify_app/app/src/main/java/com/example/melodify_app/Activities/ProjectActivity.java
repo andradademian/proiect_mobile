@@ -152,55 +152,71 @@ public class ProjectActivity extends Activity {
         // Firestore batch write instance
         WriteBatch batch = db.batch();
 
-        // Loop through the lyricsCards to validate and add to the batch
-        for (int i = 0; i < lyricsCards.size(); i++) {
-            Lyrics lyric = lyricsCards.get(i);
-            String text = lyric.getText();
+        // 1. First, delete existing lyrics from the database for this project
+        db.collection("project_component")
+                .whereEqualTo("projectID", projectID)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    // Check if there are existing lyrics for this project and delete them
+                    for (DocumentSnapshot document : querySnapshot) {
+                        batch.delete(document.getReference());
+                    }
 
-            if (!text.trim().isEmpty()) { // Only save if the lyric has content
-                Integer index;
+                    // 2. After deleting the existing lyrics, add new lyrics to the batch
+                    for (int i = 0; i < lyricsCards.size(); i++) {
+                        Lyrics lyric = lyricsCards.get(i);
+                        String text = lyric.getText();
 
-                // Generate a unique index for each lyric object
-                if (lyric.getIndex() == null || lyric.getIndex() == 0) {
-                    index = i + 1; // Use the loop index + 1 to generate a unique index
-                } else {
-                    index = lyric.getIndex();
-                }
+                        if (!text.trim().isEmpty()) { // Only save if the lyric has content
+                            Integer index;
 
-                // Set the project ID and index on the lyric object
-                lyric.setProjectID(projectID);
-                lyric.setIndex(index);
+                            // Generate a unique index for each lyric object
+                            if (lyric.getIndex() == null || lyric.getIndex() == 0) {
+                                index = i + 1; // Use the loop index + 1 to generate a unique index
+                            } else {
+                                index = lyric.getIndex();
+                            }
 
-                // Create a HashMap to explicitly define fields
-                Map<String, Object> lyricData = new HashMap<>();
-                lyricData.put("text", lyric.getText());
-                lyricData.put("projectID", projectID);
-                lyricData.put("index", index);
+                            // Set the project ID and index on the lyric object
+                            lyric.setProjectID(projectID);
+                            lyric.setIndex(index);
 
-                // Define the Firestore document ID (unique for each lyric)
-                String documentID = projectID + "_" + index + "_" + System.currentTimeMillis(); // Add timestamp for uniqueness
+                            // Create a HashMap to explicitly define fields
+                            Map<String, Object> lyricData = new HashMap<>();
+                            lyricData.put("text", lyric.getText());
+                            lyricData.put("projectID", projectID);
+                            lyricData.put("index", index);
 
-                // Add the lyric data to the batch
-                batch.set(db.collection("project_component").document(documentID), lyricData);
+                            // Define the Firestore document ID (unique for each lyric)
+                            String documentID = projectID + "_" + index + "_" + System.currentTimeMillis(); // Add timestamp for uniqueness
 
-                // Debug logging
-                Log.d("BatchDebug", "Added to batch: " + documentID);
-            }
-        }
+                            // Add the lyric data to the batch
+                            batch.set(db.collection("project_component").document(documentID), lyricData);
 
-        // Commit the batch write
-        batch.commit()
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("Firestore", "Batch write successful");
-                    Toast.makeText(ProjectActivity.this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
-                    // Reload lyrics after saving
-                    loadLyricsFromDatabase(projectID);
+                            // Debug logging
+                            Log.d("BatchDebug", "Added to batch: " + documentID);
+                        }
+                    }
+
+                    // 3. Commit the batch write to Firestore
+                    batch.commit()
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("Firestore", "Batch write successful");
+                                Toast.makeText(ProjectActivity.this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
+                                // Reload lyrics after saving
+                                loadLyricsFromDatabase(projectID);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore Error", "Batch write failed", e);
+                                Toast.makeText(ProjectActivity.this, "Failed to save lyrics!", Toast.LENGTH_SHORT).show();
+                            });
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore Error", "Batch write failed", e);
-                    Toast.makeText(ProjectActivity.this, "Failed to save lyrics!", Toast.LENGTH_SHORT).show();
+                    Log.e("Firestore Error", "Failed to fetch existing lyrics", e);
+                    Toast.makeText(ProjectActivity.this, "Error occurred while deleting existing lyrics!", Toast.LENGTH_SHORT).show();
                 });
     }
+
 
 
 
