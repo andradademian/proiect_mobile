@@ -106,7 +106,7 @@ public class ProfileActivity extends Activity {
                             for (DocumentSnapshot document : querySnapshot) {
                                 String projectName = document.getString("name");
                                 String projectDescription = document.getString("description");
-                                ProjectCard projectCard = new ProjectCard(projectName, projectDescription,user);
+                                ProjectCard projectCard = new ProjectCard(projectName, projectDescription, user);
                                 cardDataList.add(projectCard);
                             }
                             adapter.notifyDataSetChanged();
@@ -116,7 +116,6 @@ public class ProfileActivity extends Activity {
                     }
                 });
     }
-
 
     private void showEditDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
@@ -152,7 +151,6 @@ public class ProfileActivity extends Activity {
         builder.create().show();
     }
 
-
     private void showNewProjectDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
         builder.setTitle("Let's get it started!");
@@ -177,11 +175,11 @@ public class ProfileActivity extends Activity {
                             public void onSuccess(Void unused) {
                                 Toast.makeText(ProfileActivity.this,
                                         "New Song added!", Toast.LENGTH_SHORT).show();
-                                cardDataList.add(new ProjectCard(newHit.getName(), newHit.getDescription(),user));
-                                adapter.notifyDataSetChanged(); // Update RecyclerView
-
+                                ProjectCard projectCard = new ProjectCard(newHit.getName(), newHit.getDescription(), user);
+                                cardDataList.add(projectCard);
+                                adapter.notifyDataSetChanged();
                                 Intent intent = new Intent(ProfileActivity.this, ProjectActivity.class);
-                                intent.putExtra("NEW_HIT", newHit);
+                                intent.putExtra("CARD", projectCard);
                                 intent.putExtra("USER", user);
                                 startActivity(intent);
                                 finish();
