@@ -1,5 +1,6 @@
 package com.example.melodify_app.Model_Auxiliare;
 
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import java.util.List;
 public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.CardViewHolder> {
 
     private List<Lyrics> dataList;
+    private Context context;
 
     public LyricsAdapter(List<Lyrics> dataList) {
         this.dataList = dataList;
@@ -26,6 +28,7 @@ public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.CardViewHo
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lyrics_card, parent, false);
+        context=parent.getContext();
         return new CardViewHolder(view);
     }
 
@@ -52,7 +55,6 @@ public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.CardViewHo
                 // Optional: Handle logic after text is changed
             }
         });
-
     }
 
     @Override
@@ -68,4 +70,6 @@ public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.CardViewHo
             input = itemView.findViewById(R.id.editTextLyrics); // Your EditText for lyrics input
         }
     }
+
+
 }

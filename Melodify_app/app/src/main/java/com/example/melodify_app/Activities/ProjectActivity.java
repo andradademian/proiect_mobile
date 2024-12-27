@@ -27,15 +27,15 @@ import com.example.melodify_app.Model_Auxiliare.SpaceItemDecoration;
 import com.example.melodify_app.Model_Auxiliare.User;
 import com.example.melodify_app.R;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.google.firebase.firestore.WriteBatch;
 
 public class ProjectActivity extends Activity {
     User user;
