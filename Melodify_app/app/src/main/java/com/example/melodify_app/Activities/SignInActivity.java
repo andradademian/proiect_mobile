@@ -2,6 +2,7 @@ package com.example.melodify_app.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -75,6 +76,14 @@ public class SignInActivity extends Activity {
                                         User user = new User (document.getString("name"), document.getString("email"), document.getString("password"));
                                         Intent intent = new Intent(SignInActivity.this, ProfileActivity.class);
                                         intent.putExtra("USER", user);
+
+                                        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("name", user.getName());
+                                        editor.putString("email", user.getEmail());
+                                        editor.putString("password", user.getPassword());
+                                        editor.putBoolean("isLoggedIn", true);
+                                        editor.apply();
 
                                         startActivity(intent);
                                         finish();

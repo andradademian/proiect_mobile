@@ -12,8 +12,6 @@ tools:context=".Activities.SignUpActivity">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!--
-     -->
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -40,8 +38,8 @@ tools:context=".Activities.SignUpActivity">
                 android:textSize="36dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                android:textColor="#e2c2c2"
-                app:layout_constraintBottom_toTopOf="@+id/login_adress" />
+                android:textColor="#e2c2c2"/>
+<!--                app:layout_constraintBottom_toTopOf="@+id/login_adress" -->
 
             <EditText
                 android:id="@+id/signup_name"
@@ -89,7 +87,35 @@ tools:context=".Activities.SignUpActivity">
                 android:textColor="@color/black"
 
                 android:background="#ef9f9f"
+                />
 
+            <EditText
+                android:id="@+id/confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+
+                android:layout_marginTop="20dp"
+                android:drawablePadding="8dp"
+                android:ems="10"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:padding="8dp"
+                android:textColor="@color/black"
+
+                android:background="#ef9f9f"
+                />
+
+            <TextView
+                android:id="@+id/no_match"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="the passwords do not match"
+                android:background="#ef9fff"
+                android:textSize="12dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="#FF0000"
                 />
 
 <!--            <EditText-->

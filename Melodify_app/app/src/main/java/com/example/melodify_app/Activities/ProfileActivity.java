@@ -3,6 +3,7 @@ package com.example.melodify_app.Activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +36,7 @@ import java.util.List;
 
 public class ProfileActivity extends Activity {
 
-    private Button edit_button, new_hit_button;
+    private Button edit_button, new_hit_button, logout_button;
     private List<ProjectCard> cardDataList;
     private User user;
 
@@ -58,6 +59,7 @@ public class ProfileActivity extends Activity {
         // Initialize UI components
         edit_button = findViewById(R.id.edit_button);
         new_hit_button = findViewById(R.id.new_hit_button);
+        logout_button=findViewById(R.id.logout_button);
         recyclerView = findViewById(R.id.recycler_view);
         cardDataList = new ArrayList<>();
 
@@ -88,11 +90,15 @@ public class ProfileActivity extends Activity {
                 showNewProjectDialog();
             }
         });
+
+        logout_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
     }
 
-    /**
-     * Fetches projects for the user from Firestore and updates the RecyclerView.
-     */
     private void loadProjects() {
         db.collection("projects")
                 .whereEqualTo("userID", user.getEmail())
@@ -197,5 +203,17 @@ public class ProfileActivity extends Activity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         builder.create().show();
+    }
+
+    private void logout() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(ProfileActivity.this, SignInActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 }
