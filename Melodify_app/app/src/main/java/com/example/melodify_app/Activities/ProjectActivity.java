@@ -176,7 +176,7 @@ public class ProjectActivity extends Activity {
         });
         // Load saved lyrics from Firestore
         loadLyricsFromDatabase();
-        //loadAudioFiles();
+        loadAudioFiles();
     }
 
     private Integer findIndexPosition(String projectId) {
@@ -398,14 +398,18 @@ public class ProjectActivity extends Activity {
     private void loadAudioFiles() {
         db.collection("project_component")
                 .whereEqualTo("projectID", projectID)
+                //.whereArrayContains(FieldPath.documentId(),"_audio_")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     registrationCards.clear();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        AudioFile audioFile=document.toObject(AudioFile.class);
-                        Log.d("ProjectActivity", document.toString());
-                        Log.d("ProjectActivity", audioFile.toString());
-                        registrationCards.add(audioFile);
+                        if(document.getId().contains("_audio_")){
+                            AudioFile audioFile=document.toObject(AudioFile.class);
+                            Log.d("ProjectActivity", document.toString());
+                            Log.d("ProjectActivity", audioFile.toString());
+                            registrationCards.add(audioFile);
+                        }
+
                     }
                     recordAdapter.notifyDataSetChanged();
                 })
