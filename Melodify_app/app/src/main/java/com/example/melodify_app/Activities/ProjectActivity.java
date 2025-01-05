@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -51,7 +52,7 @@ public class ProjectActivity extends Activity {
     private LyricsAdapter lyricsAdapter;
     private MediaRecorder mediaRecorder;
     private String filePath;
-    private boolean isRecording = false;
+    private boolean isRecording = false, pressed= true;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1000;
 
     private FirebaseFirestore db;
@@ -103,12 +104,21 @@ public class ProjectActivity extends Activity {
         filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
 
         addRecordingButton.setOnClickListener(v -> {
-            if (checkPermissions()) {
-                startRecording();
-                addRecordingButton.setText("Stop Recording!");
-            } else {
-                requestPermissions();
+            boolean permis = checkPermissions();
+            changeText(pressed);
+            if(!pressed){
+                if (permis) {
+                    //Toast.makeText(this, "Recording", Toast.LENGTH_SHORT).show();
+                    startRecording();
+                } else {
+                    //Toast.makeText(this, "Recording", Toast.LENGTH_SHORT).show();
+                    requestPermissions();
+                }
             }
+            else{
+                //stop reording
+            }
+            pressed=!pressed;
         });
 
         addLyricsButton.setOnClickListener(v -> {
@@ -169,6 +179,16 @@ public class ProjectActivity extends Activity {
                 count++;
         }
         return count;
+    }
+
+    private void changeText(boolean pressed){
+        addRecordingButton.setText("Stop Recording");
+            if(pressed) {
+                addRecordingButton.setText("Stop Recording");
+            }
+            if(!pressed){
+                addRecordingButton.setText("Add Recording");
+            }
     }
     private void saveLyricsToDatabase() {
         // Initialize Firestore
@@ -246,11 +266,6 @@ public class ProjectActivity extends Activity {
                 });
     }
 
-
-
-
-
-
     private void loadLyricsFromDatabase(String projectID) {
         db.collection("project_component")
                 .whereEqualTo("projectID", projectID) // Filter by project_id
@@ -270,23 +285,38 @@ public class ProjectActivity extends Activity {
     }
 
 
-
     private boolean checkPermissions() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissions() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_RECORD_AUDIO_PERMISSION);
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_RECORD_AUDIO_PERMISSION);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startRecording();
+            } else {
+                Toast.makeText(this, "Permissions required to record audio", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void startRecording() {
         if (isRecording) {
-            Toast.makeText(this, "Recording is already in progress", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Stopping...", Toast.LENGTH_SHORT).show();
             return;
         }
-
         try {
+            Toast.makeText(this, "Recording starting", Toast.LENGTH_SHORT).show();
+
             mediaRecorder = new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -297,7 +327,6 @@ public class ProjectActivity extends Activity {
             mediaRecorder.start();
             isRecording = true;
 
-            Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
         } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
             Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show();
