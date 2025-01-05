@@ -70,4 +70,7 @@ dependencies {
 
     implementation(libs.jbcrypt)
 
+    implementation("com.google.firebase:firebase-storage:20.2.0")
+    //apply plugin: 'com.google.gms.google-services'
+
 }

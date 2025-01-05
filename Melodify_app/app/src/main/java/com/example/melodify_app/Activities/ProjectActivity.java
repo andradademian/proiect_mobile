@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -30,8 +31,12 @@ import com.example.melodify_app.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,17 +50,18 @@ public class ProjectActivity extends Activity {
     List<AudioFile> registrationCards;
 
     private Button saveSongButton, addRecordingButton, addLyricsButton;
-    private ImageButton playRecordingButton,pinButton;
-    private ImageButton backButton,deleteHit;
+    private ImageButton playRecordingButton, pinButton;
+    private ImageButton backButton, deleteHit;
 
     private RecyclerView recyclerViewLyrics;
     private LyricsAdapter lyricsAdapter;
     private MediaRecorder mediaRecorder;
     private String filePath;
-    private boolean isRecording = false, pressed= true;
+    private boolean isRecording = false, pressed = true;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1000;
 
     private FirebaseFirestore db;
+    FirebaseStorage storage;
     private CollectionReference lyricsCollection;
 
     @Override
@@ -63,8 +69,8 @@ public class ProjectActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.project_layout);
 
-        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
         lyricsCollection = db.collection("project_component");
 
         user = (User) getIntent().getSerializableExtra("USER");
@@ -88,8 +94,6 @@ public class ProjectActivity extends Activity {
         int spacing = 45; // Adjust the spacing as needed
         recyclerViewLyrics.addItemDecoration(new SpaceItemDecoration(spacing));
 
-       // registrationCards.add(new AudioFile(""));  // Add data for registration cards
-
         RecyclerView recyclerViewRegistration = findViewById(R.id.recycler_registration);
         recyclerViewRegistration.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewRegistration.setAdapter(new RegistrationCardAdapter(registrationCards));
@@ -101,12 +105,13 @@ public class ProjectActivity extends Activity {
         backButton = findViewById(R.id.imageButton1);
         deleteHit = findViewById(R.id.deleteHit);
 
-        filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
+        //filePath = getExternalCacheDir().getAbsolutePath() + "/recording.3gp"; // Adjust path as needed
+        filePath = getExternalFilesDir(null).getAbsolutePath() + "/audio_" + System.currentTimeMillis() + ".mp3";
 
         addRecordingButton.setOnClickListener(v -> {
             boolean permis = checkPermissions();
             changeText(pressed);
-            if(!pressed){
+            if (pressed) {
                 if (permis) {
                     //Toast.makeText(this, "Recording", Toast.LENGTH_SHORT).show();
                     startRecording();
@@ -114,11 +119,10 @@ public class ProjectActivity extends Activity {
                     //Toast.makeText(this, "Recording", Toast.LENGTH_SHORT).show();
                     requestPermissions();
                 }
+            } else {
+                stopRecording();
             }
-            else{
-                //stop reording
-            }
-            pressed=!pressed;
+            pressed = !pressed;
         });
 
         addLyricsButton.setOnClickListener(v -> {
@@ -129,7 +133,7 @@ public class ProjectActivity extends Activity {
 
         saveSongButton.setOnClickListener(v -> saveLyricsToDatabase());
 
-        deleteHit.setOnClickListener(v->{
+        deleteHit.setOnClickListener(v -> {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             db.collection("project_component")
@@ -172,24 +176,24 @@ public class ProjectActivity extends Activity {
         loadLyricsFromDatabase(projectID);
     }
 
-    private Integer findIndexPosition(String projectId){
-        int count=0;
-        for( Lyrics lyrics: lyricsCards){
-            if(lyrics.getProjectID().equals(projectId))
+    private Integer findIndexPosition(String projectId) {
+        int count = 0;
+        for (Lyrics lyrics : lyricsCards) {
+            if (lyrics.getProjectID().equals(projectId))
                 count++;
         }
         return count;
     }
 
-    private void changeText(boolean pressed){
-        addRecordingButton.setText("Stop Recording");
-            if(pressed) {
-                addRecordingButton.setText("Stop Recording");
-            }
-            if(!pressed){
-                addRecordingButton.setText("Add Recording");
-            }
+    private void changeText(boolean pressed) {
+        if (pressed) {
+            addRecordingButton.setText("Stop Recording");
+        }
+        if (!pressed) {
+            addRecordingButton.setText("Add Recording");
+        }
     }
+
     private void saveLyricsToDatabase() {
         // Initialize Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -284,7 +288,6 @@ public class ProjectActivity extends Activity {
                 .addOnFailureListener(e -> Log.e("Firestore Error", "Error fetching lyrics: ", e));
     }
 
-
     private boolean checkPermissions() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
@@ -310,19 +313,20 @@ public class ProjectActivity extends Activity {
     }
 
     private void startRecording() {
-        if (isRecording) {
-            Toast.makeText(this, "Stopping...", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (isRecording) {
+//            Toast.makeText(this, "Stopping...", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+        filePath = getExternalFilesDir(null).getAbsolutePath() + "/audio_" + System.currentTimeMillis() + ".mp3";
+
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setOutputFile(filePath);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+
         try {
-            Toast.makeText(this, "Recording starting", Toast.LENGTH_SHORT).show();
-
-            mediaRecorder = new MediaRecorder();
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mediaRecorder.setOutputFile(filePath);
-
+            Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
             mediaRecorder.prepare();
             mediaRecorder.start();
             isRecording = true;
@@ -332,6 +336,77 @@ public class ProjectActivity extends Activity {
             Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void stopRecording() {
+        if (mediaRecorder != null) {
+            try {
+                mediaRecorder.stop();
+                mediaRecorder.release();
+                Log.d("Recording", "Recording stopped, file saved at: " + filePath);
+                Toast.makeText(this, "Recording stopped, file saved at: " + filePath, Toast.LENGTH_SHORT).show();
+                uploadFileToFirestore(filePath);  // Trigger file upload
+            } catch (RuntimeException e) {
+                Log.e("Recording", "Stop recording failed", e);
+                new File(filePath).delete();
+            } finally {
+                mediaRecorder = null;
+            }
+        }
+    }
+
+
+    //TODO
+    private void uploadFileToFirestore(String filePath) {
+        Uri fileUri = Uri.fromFile(new File(filePath));
+        StorageReference storageRef = storage.getReference().child("audio/" + fileUri.getLastPathSegment());
+
+        storageRef.putFile(fileUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // Get download URL and save metadata to Firestore
+                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String downloadUrl = uri.toString();
+                        saveFileMetadataToFirestore(downloadUrl);
+                    });
+                    Toast.makeText(this, "File uploaded successfully", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirebaseStorage", "Upload failed", e);
+                    Toast.makeText(this, "Upload failed", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void saveFileMetadataToFirestore(String downloadUrl) {
+        Map<String, Object> audioData = new HashMap<>();
+        audioData.put("url", downloadUrl);
+        audioData.put("timestamp", System.currentTimeMillis());
+
+        db.collection("project_component")
+                .add(audioData)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("Firestore", "Document added with ID: " + documentReference.getId());
+                    Toast.makeText(this, "File metadata saved to Firestore", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error adding document", e);
+                });
+    }
+
+
+    private void fetchAudioFiles() {
+        db.collection("project_component")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String url = document.getString("url");
+                        Log.d("Firestore", "Audio URL: " + url);
+                        // Use the URL, e.g., to play the audio or download it
+                    }
+                })
+                .addOnFailureListener(exception -> {
+                    Log.e("Firestore", "Error fetching documents", exception);
+                });
+    }
+
 
     @Override
     protected void onStop() {
