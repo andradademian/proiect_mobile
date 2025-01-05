@@ -55,6 +55,7 @@ public class ProjectActivity extends Activity {
 
     private RecyclerView recyclerViewLyrics;
     private LyricsAdapter lyricsAdapter;
+    private RegistrationCardAdapter recordAdapter;
     private MediaRecorder mediaRecorder;
     private String filePath;
     private boolean isRecording = false, pressed = true;
@@ -63,6 +64,7 @@ public class ProjectActivity extends Activity {
     private FirebaseFirestore db;
     FirebaseStorage storage;
     private CollectionReference lyricsCollection;
+    String projectID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class ProjectActivity extends Activity {
         TextView songtitle = findViewById(R.id.textView3);
         songtitle.setText(project.getTitle());
 
-        String projectID = project.getUser().getEmail() + "_" + project.getTitle();
+        projectID = project.getUser().getEmail() + "_" + project.getTitle();
         TextView songdescription = findViewById(R.id.song_description);
         songdescription.setText(project.getDescription());
 
@@ -173,7 +175,8 @@ public class ProjectActivity extends Activity {
             finish();
         });
         // Load saved lyrics from Firestore
-        loadLyricsFromDatabase(projectID);
+        loadLyricsFromDatabase();
+        //loadAudioFiles();
     }
 
     private Integer findIndexPosition(String projectId) {
@@ -195,12 +198,8 @@ public class ProjectActivity extends Activity {
     }
 
     private void saveLyricsToDatabase() {
-        // Initialize Firestore
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         // Get the ProjectCard and construct the project ID
         ProjectCard project = (ProjectCard) getIntent().getSerializableExtra("CARD");
-        String projectID = project.getUser().getEmail() + "_" + project.getTitle(); // Construct project_id
 
         // Firestore batch write instance
         WriteBatch batch = db.batch();
@@ -241,7 +240,8 @@ public class ProjectActivity extends Activity {
                             lyricData.put("index", index);
 
                             // Define the Firestore document ID (unique for each lyric)
-                            String documentID = projectID + "_" + index + "_" + System.currentTimeMillis(); // Add timestamp for uniqueness
+                            String documentID = projectID + "_text_"
+                                    + index + "_" + System.currentTimeMillis();
 
                             // Add the lyric data to the batch
                             batch.set(db.collection("project_component").document(documentID), lyricData);
@@ -257,7 +257,7 @@ public class ProjectActivity extends Activity {
                                 Log.d("Firestore", "Batch write successful");
                                 Toast.makeText(ProjectActivity.this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
                                 // Reload lyrics after saving
-                                loadLyricsFromDatabase(projectID);
+                                loadLyricsFromDatabase();
                             })
                             .addOnFailureListener(e -> {
                                 Log.e("Firestore Error", "Batch write failed", e);
@@ -270,7 +270,7 @@ public class ProjectActivity extends Activity {
                 });
     }
 
-    private void loadLyricsFromDatabase(String projectID) {
+    private void loadLyricsFromDatabase() {
         db.collection("project_component")
                 .whereEqualTo("projectID", projectID) // Filter by project_id
                 .get()
@@ -377,30 +377,37 @@ public class ProjectActivity extends Activity {
 
     private void saveFileMetadataToFirestore(String downloadUrl) {
         Map<String, Object> audioData = new HashMap<>();
+        audioData.put("projectID", projectID);
+        audioData.put("hashtag","#custom_instrument");
         audioData.put("url", downloadUrl);
         audioData.put("timestamp", System.currentTimeMillis());
 
+        String documentID = projectID + "_audio_" + System.currentTimeMillis();
         db.collection("project_component")
-                .add(audioData)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d("Firestore", "Document added with ID: " + documentReference.getId());
-                    Toast.makeText(this, "File metadata saved to Firestore", Toast.LENGTH_SHORT).show();
+                .document(documentID)  // Use custom ID
+                .set(audioData)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error adding document", e);
+                    Log.e("Firestore", "Error adding document with custom ID", e);
                 });
     }
 
 
-    private void fetchAudioFiles() {
+    private void loadAudioFiles() {
         db.collection("project_component")
+                .whereEqualTo("projectID", projectID)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    registrationCards.clear();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String url = document.getString("url");
-                        Log.d("Firestore", "Audio URL: " + url);
-                        // Use the URL, e.g., to play the audio or download it
+                        AudioFile audioFile=document.toObject(AudioFile.class);
+                        Log.d("ProjectActivity", document.toString());
+                        Log.d("ProjectActivity", audioFile.toString());
+                        registrationCards.add(audioFile);
                     }
+                    recordAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(exception -> {
                     Log.e("Firestore", "Error fetching documents", exception);
