@@ -2,17 +2,24 @@ package com.example.melodify_app.Model_Auxiliare;
 
 public class AudioFile {
     String url;
-    String hashtag; //instrument
+    String hashtag; // instrument
     String projectID;
     long timestamp;
 
-    public AudioFile(String file_name, String hashtag, String projectID, long timestamp) {
-        this.url = file_name;
-        this.hashtag = hashtag;
-        this.projectID = projectID;
-        this.timestamp=timestamp;
+    // Default constructor (required for Firestore deserialization)
+    public AudioFile() {
     }
 
+    // Parameterized constructor
+    public AudioFile(String file_name, String hashtag, String projectID, long timestamp) {
+        this.url = file_name != null ? file_name : "";  // Fallback to an empty string
+        this.hashtag = hashtag != null ? hashtag : "#unknown";  // Fallback to default
+        this.projectID = projectID != null ? projectID : "unknown";
+        this.timestamp = timestamp > 0 ? timestamp : System.currentTimeMillis();
+    }
+
+
+    // Getters and setters
     public String getUrl() {
         return url;
     }
@@ -43,5 +50,15 @@ public class AudioFile {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "AudioFile{" +
+                "url='" + url + '\'' +
+                ", hashtag='" + hashtag + '\'' +
+                ", projectID='" + projectID + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }

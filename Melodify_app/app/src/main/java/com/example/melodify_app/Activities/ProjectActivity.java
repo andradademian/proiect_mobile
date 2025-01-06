@@ -175,7 +175,7 @@ public class ProjectActivity extends Activity {
             finish();
         });
         // Load saved lyrics from Firestore
-        loadLyricsFromDatabase();
+        loadLyricsFromDatabase(projectID);
         loadAudioFiles();
     }
 
@@ -257,7 +257,7 @@ public class ProjectActivity extends Activity {
                                 Log.d("Firestore", "Batch write successful");
                                 Toast.makeText(ProjectActivity.this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
                                 // Reload lyrics after saving
-                                loadLyricsFromDatabase();
+                                loadLyricsFromDatabase(projectID);
                             })
                             .addOnFailureListener(e -> {
                                 Log.e("Firestore Error", "Batch write failed", e);
@@ -270,7 +270,7 @@ public class ProjectActivity extends Activity {
                 });
     }
 
-    private void loadLyricsFromDatabase() {
+    private void loadLyricsFromDatabase(String projectID) {
         db.collection("project_component")
                 .whereEqualTo("projectID", projectID) // Filter by project_id
                 .get()
@@ -398,23 +398,49 @@ public class ProjectActivity extends Activity {
     private void loadAudioFiles() {
         db.collection("project_component")
                 .whereEqualTo("projectID", projectID)
-                //.whereArrayContains(FieldPath.documentId(),"_audio_")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    registrationCards.clear();
+                    registrationCards.clear(); // Clear the list to avoid duplication
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        if(document.getId().contains("_audio_")){
-                            AudioFile audioFile=document.toObject(AudioFile.class);
-                            Log.d("ProjectActivity", document.toString());
-                            Log.d("ProjectActivity", audioFile.toString());
-                            registrationCards.add(audioFile);
-                        }
+                        if (document.getId().contains("_audio_")) {
+                            try {
+                                // Extract fields from the Firestore document
+                                String url = document.getString("url");
+                                String hashtag = document.getString("hashtag");
+                                String projectID = document.getString("projectID");
+                                Long timestamp = document.getLong("timestamp");
 
+                                // Validate retrieved fields
+                                if (url == null || url.isEmpty()) {
+                                    Log.e("ProjectActivity", "Missing or empty URL in document: " + document.getId());
+                                    continue;
+                                }
+                                if (projectID == null) {
+                                    Log.e("ProjectActivity", "Missing projectID in document: " + document.getId());
+                                    continue;
+                                }
+                                if (timestamp == null) timestamp = 0L; // Default to 0 if missing
+
+                                // Create and add the AudioFile object
+                                AudioFile audioFile = new AudioFile(url, hashtag, projectID, timestamp);
+                                registrationCards.add(audioFile);
+                                Log.d("ProjectActivity", "AudioFile loaded: " + audioFile.toString());
+                            } catch (Exception e) {
+                                Log.e("ProjectActivity", "Error processing document: " + document.getId(), e);
+                            }
+                        }
                     }
-                    recordAdapter.notifyDataSetChanged();
+
+                    // Notify adapter of data changes
+                    if (recordAdapter != null) {
+                        recordAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.e("ProjectActivity", "recordAdapter is null. Cannot update RecyclerView.");
+                    }
                 })
                 .addOnFailureListener(exception -> {
                     Log.e("Firestore", "Error fetching documents", exception);
+                    Toast.makeText(this, "Failed to load audio files", Toast.LENGTH_SHORT).show();
                 });
     }
 
