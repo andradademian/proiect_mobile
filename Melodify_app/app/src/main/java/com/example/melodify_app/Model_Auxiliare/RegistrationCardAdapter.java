@@ -89,7 +89,7 @@ public class RegistrationCardAdapter extends RecyclerView.Adapter<RegistrationCa
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             playButton = itemView.findViewById(R.id.imageButton); // Match the ID in registration_card.xml
-           // hashtagTextView = itemView.findViewById(R.id.hashtagTextView); // ID for hashtag TextView
+            hashtagTextView = itemView.findViewById(R.id.hashtagTextView); // ID for hashtag TextView
            // timestampTextView = itemView.findViewById(R.id.timestampTextView); // ID for timestamp TextView
         }
     }
