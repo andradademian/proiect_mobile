@@ -100,7 +100,7 @@ public class ProjectActivity extends Activity {
         recyclerViewRegistration.setLayoutManager(new LinearLayoutManager(this));
         recordAdapter = new RegistrationCardAdapter(registrationCards);
         recyclerViewRegistration.setAdapter(recordAdapter);
-        //recyclerViewRegistration.addItemDecoration(new SpaceItemDecoration(spacing));
+        recyclerViewRegistration.addItemDecoration(new SpaceItemDecoration(spacing));
 
         addRecordingButton = findViewById(R.id.recordAdd);
         addLyricsButton = findViewById(R.id.textAdd);
