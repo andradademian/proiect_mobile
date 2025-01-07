@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RegistrationCardAdapter extends RecyclerView.Adapter<RegistrationCardAdapter.ViewHolder> {
 
-    private final List<AudioFile> dataList; // List of AudioFile objects
+    private List<AudioFile> dataList; // List of AudioFile objects
     private Context context;
 
     public RegistrationCardAdapter(List<AudioFile> dataList) {

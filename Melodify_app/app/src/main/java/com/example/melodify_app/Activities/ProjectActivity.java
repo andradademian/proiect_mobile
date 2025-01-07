@@ -53,7 +53,7 @@ public class ProjectActivity extends Activity {
     private ImageButton playRecordingButton, pinButton;
     private ImageButton backButton, deleteHit;
 
-    private RecyclerView recyclerViewLyrics;
+    private RecyclerView recyclerViewLyrics, recyclerViewRegistration;
     private LyricsAdapter lyricsAdapter;
     private RegistrationCardAdapter recordAdapter;
     private MediaRecorder mediaRecorder;
@@ -96,7 +96,7 @@ public class ProjectActivity extends Activity {
         int spacing = 45; // Adjust the spacing as needed
         recyclerViewLyrics.addItemDecoration(new SpaceItemDecoration(spacing));
 
-        RecyclerView recyclerViewRegistration = findViewById(R.id.recycler_registration);
+        recyclerViewRegistration = findViewById(R.id.recycler_registration);
         recyclerViewRegistration.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewRegistration.setAdapter(new RegistrationCardAdapter(registrationCards));
         recyclerViewRegistration.addItemDecoration(new SpaceItemDecoration(spacing));
@@ -277,11 +277,13 @@ public class ProjectActivity extends Activity {
                 .addOnSuccessListener(querySnapshot -> {
                     lyricsCards.clear(); // Clear existing data
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        if (document.getId().contains("_text_")) {
                         Lyrics lyric = document.toObject(Lyrics.class);
                         Log.d("ProjectActivity", document.toString());
                         Log.d("ProjectActivity", lyric.toString());
 
                         lyricsCards.add(lyric);
+                        }
                     }
                     lyricsAdapter.notifyDataSetChanged(); // Update RecyclerView
                 })
