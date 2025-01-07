@@ -86,7 +86,7 @@ public class ProjectActivity extends Activity {
 
         registrationCards = new ArrayList<>();
         lyricsCards = new ArrayList<>();
-        registrationCards.add(new AudioFile("aa","#","",1));
+        //registrationCards.add(new AudioFile("aa","#","",1));
 
         int spacing = 45; // Adjust the spacing as needed
         // Initialize RecyclerView for Lyrics
@@ -177,7 +177,7 @@ public class ProjectActivity extends Activity {
         });
 
         loadLyricsFromDatabase(projectID);
-       // loadAudioFiles();
+        loadAudioFiles();
     }
 
     private Integer findIndexPosition(String projectId) {
