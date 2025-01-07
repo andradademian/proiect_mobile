@@ -100,7 +100,7 @@ public class ProjectActivity extends Activity {
         recyclerViewRegistration.setLayoutManager(new LinearLayoutManager(this));
         recordAdapter = new RegistrationCardAdapter(registrationCards);
         recyclerViewRegistration.setAdapter(recordAdapter);
-        recyclerViewRegistration.addItemDecoration(new SpaceItemDecoration(spacing));
+        //recyclerViewRegistration.addItemDecoration(new SpaceItemDecoration(spacing));
 
         addRecordingButton = findViewById(R.id.recordAdd);
         addLyricsButton = findViewById(R.id.textAdd);
@@ -385,6 +385,10 @@ public class ProjectActivity extends Activity {
         audioData.put("url", downloadUrl);
         audioData.put("timestamp", System.currentTimeMillis());
 
+        AudioFile audio=new AudioFile(downloadUrl,"#custom_instrument",projectID,System.currentTimeMillis());
+        registrationCards.add(audio);
+        recordAdapter.notifyDataSetChanged();
+
         String documentID = projectID + "_audio_" + System.currentTimeMillis();
         db.collection("project_component")
                 .document(documentID)  // Use custom ID
@@ -403,7 +407,7 @@ public class ProjectActivity extends Activity {
                 .whereEqualTo("projectID", projectID)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    //registrationCards.clear(); // Clear the list to avoid duplication
+                    registrationCards.clear(); // Clear the list to avoid duplication
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         if (document.getId().contains("_audio_")) {
                             try {

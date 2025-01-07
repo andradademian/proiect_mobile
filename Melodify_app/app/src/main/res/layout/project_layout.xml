@@ -114,7 +114,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardRegistration"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="#eb6c6c"
         android:layout_marginTop="25dp"
         app:cardElevation="20dp"
@@ -126,9 +126,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_registration"
-            android:paddingTop="10dp"
+            android:padding="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scrollbars="vertical" />
     </androidx.cardview.widget.CardView>
 
