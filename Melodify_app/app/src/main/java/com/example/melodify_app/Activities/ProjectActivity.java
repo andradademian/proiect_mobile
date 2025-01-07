@@ -86,19 +86,20 @@ public class ProjectActivity extends Activity {
 
         registrationCards = new ArrayList<>();
         lyricsCards = new ArrayList<>();
+        registrationCards.add(new AudioFile("aa","#","",1));
 
+        int spacing = 45; // Adjust the spacing as needed
         // Initialize RecyclerView for Lyrics
         recyclerViewLyrics = findViewById(R.id.recycler_view);
         recyclerViewLyrics.setLayoutManager(new LinearLayoutManager(this));
         lyricsAdapter = new LyricsAdapter(lyricsCards);
         recyclerViewLyrics.setAdapter(lyricsAdapter);
-
-        int spacing = 45; // Adjust the spacing as needed
         recyclerViewLyrics.addItemDecoration(new SpaceItemDecoration(spacing));
 
         recyclerViewRegistration = findViewById(R.id.recycler_registration);
         recyclerViewRegistration.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewRegistration.setAdapter(new RegistrationCardAdapter(registrationCards));
+        recordAdapter = new RegistrationCardAdapter(registrationCards);
+        recyclerViewRegistration.setAdapter(recordAdapter);
         recyclerViewRegistration.addItemDecoration(new SpaceItemDecoration(spacing));
 
         addRecordingButton = findViewById(R.id.recordAdd);
@@ -174,9 +175,9 @@ public class ProjectActivity extends Activity {
             startActivity(intent);
             finish();
         });
-        // Load saved lyrics from Firestore
+
         loadLyricsFromDatabase(projectID);
-        loadAudioFiles();
+       // loadAudioFiles();
     }
 
     private Integer findIndexPosition(String projectId) {
@@ -402,7 +403,7 @@ public class ProjectActivity extends Activity {
                 .whereEqualTo("projectID", projectID)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    registrationCards.clear(); // Clear the list to avoid duplication
+                    //registrationCards.clear(); // Clear the list to avoid duplication
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         if (document.getId().contains("_audio_")) {
                             try {
@@ -426,6 +427,8 @@ public class ProjectActivity extends Activity {
                                 // Create and add the AudioFile object
                                 AudioFile audioFile = new AudioFile(url, hashtag, projectID, timestamp);
                                 registrationCards.add(audioFile);
+                                Log.d("RecyclerView", "Number of items in registrationCards: " + registrationCards.size());
+
                                 Log.d("ProjectActivity", "AudioFile loaded: " + audioFile.toString());
                             } catch (Exception e) {
                                 Log.e("ProjectActivity", "Error processing document: " + document.getId(), e);
@@ -434,11 +437,13 @@ public class ProjectActivity extends Activity {
                     }
 
                     // Notify adapter of data changes
+                    Log.d("reccord",String.valueOf(recordAdapter.getItemCount()));
                     if (recordAdapter != null) {
                         recordAdapter.notifyDataSetChanged();
                     } else {
                         Log.e("ProjectActivity", "recordAdapter is null. Cannot update RecyclerView.");
                     }
+               //     recordAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(exception -> {
                     Log.e("Firestore", "Error fetching documents", exception);

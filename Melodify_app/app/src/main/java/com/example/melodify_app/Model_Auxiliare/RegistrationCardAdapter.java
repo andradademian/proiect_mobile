@@ -43,7 +43,7 @@ public class RegistrationCardAdapter extends RecyclerView.Adapter<RegistrationCa
 
         // Display metadata in the TextView(s)
         holder.hashtagTextView.setText(audioFile.getHashtag());
-        holder.timestampTextView.setText(formatTimestamp(audioFile.getTimestamp()));
+       // holder.timestampTextView.setText(formatTimestamp(audioFile.getTimestamp()));
 
         // Set up play button to play audio
         holder.playButton.setOnClickListener(v -> {

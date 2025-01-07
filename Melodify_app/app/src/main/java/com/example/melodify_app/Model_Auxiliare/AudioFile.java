@@ -11,8 +11,8 @@ public class AudioFile {
     }
 
     // Parameterized constructor
-    public AudioFile(String file_name, String hashtag, String projectID, long timestamp) {
-        this.url = file_name != null ? file_name : "";  // Fallback to an empty string
+    public AudioFile(String url, String hashtag, String projectID, long timestamp) {
+        this.url = url != null ? url : "";  // Fallback to an empty string
         this.hashtag = hashtag != null ? hashtag : "#unknown";  // Fallback to default
         this.projectID = projectID != null ? projectID : "unknown";
         this.timestamp = timestamp > 0 ? timestamp : System.currentTimeMillis();
