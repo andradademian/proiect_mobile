@@ -212,7 +212,10 @@ public class ProjectActivity extends Activity {
                 .addOnSuccessListener(querySnapshot -> {
                     // Check if there are existing lyrics for this project and delete them
                     for (DocumentSnapshot document : querySnapshot) {
-                        batch.delete(document.getReference());
+                        // Only delete documents whose names contain "text"
+                        if (document.getId().contains("text")) {
+                            batch.delete(document.getReference());
+                        }
                     }
 
                     // 2. After deleting the existing lyrics, add new lyrics to the batch
