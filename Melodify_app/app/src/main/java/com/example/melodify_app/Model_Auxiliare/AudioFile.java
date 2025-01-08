@@ -18,8 +18,10 @@ public class AudioFile {
         this.timestamp = timestamp > 0 ? timestamp : System.currentTimeMillis();
     }
 
+    public String getDocumentID(){
+        return projectID+"_audio_"+timestamp;
+    }
 
-    // Getters and setters
     public String getUrl() {
         return url;
     }
