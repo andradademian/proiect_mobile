@@ -15,13 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.melodify_app.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.List;
 
 public class RegistrationCardAdapter extends RecyclerView.Adapter<RegistrationCardAdapter.ViewHolder> {
 
-    private List<AudioFile> dataList; // List of AudioFile objects
+    private List<AudioFile> dataList;
     private Context context;
 
     public RegistrationCardAdapter(List<AudioFile> dataList) {
@@ -59,21 +60,35 @@ public class RegistrationCardAdapter extends RecyclerView.Adapter<RegistrationCa
             }
         });
 
-        // Handle long press to delete the item
         holder.itemView.setOnLongClickListener(v -> {
             new AlertDialog.Builder(context)
                     .setTitle("Delete Item")
                     .setMessage("Are you sure you want to delete this item?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        dataList.remove(position); // Remove item from the list
-                        notifyItemRemoved(position); // Notify adapter
-                        Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
+
+                        String documentId = audioFile.getDocumentID();
+
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                        db.collection("project_component")
+                                .document(documentId)
+                                .delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    dataList.remove(position);
+                                    notifyItemRemoved(position);
+                                    Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(context, "Failed to delete item", Toast.LENGTH_SHORT).show();
+                                    Log.e("Firestore", "Error deleting document", e);
+                                });
                     })
                     .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                     .create()
                     .show();
             return true;
         });
+
     }
 
     @Override
