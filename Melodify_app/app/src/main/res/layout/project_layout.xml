@@ -77,20 +77,11 @@
                 android:textColor="@color/black"
                 android:textSize="20dp" />
 
-            <Button
-                android:id="@+id/saveSong"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:background="#ef9f9f"
-                android:text="Save Song" />
-
             <!-- Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -112,6 +103,15 @@
                     android:background="#ef9f9f"
                     android:text="Add text" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/saveSong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:background="#ef9f9f"
+                android:text="Save Song" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

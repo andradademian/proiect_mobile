@@ -87,8 +87,9 @@ public class SignUpActivity extends Activity {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void unused) {
-                                                        Toast.makeText(SignUpActivity.this, "Please log in!", Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                                        Toast.makeText(SignUpActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(SignUpActivity.this, ProfileActivity.class);
+                                                        intent.putExtra("USER", user);
                                                         startActivity(intent);
                                                         finish();
                                                     }
