@@ -55,7 +55,13 @@
                     app:layout_constraintEnd_toStartOf="@id/deleteHit"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                     />
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeMaxTextSize="25sp"
+                    android:autoSizeStepGranularity="2sp" />
+
 
                 <ImageButton
                     android:id="@+id/deleteHit"
@@ -75,7 +81,13 @@
                 android:gravity="center"
                 android:text="description"
                 android:textColor="@color/black"
-                android:textSize="20dp" />
+                android:textSize="20sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeStepGranularity="2sp" />
 
             <!-- Buttons -->
             <LinearLayout

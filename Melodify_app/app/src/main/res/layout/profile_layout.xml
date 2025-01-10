@@ -59,8 +59,14 @@
                     android:padding="10dp"
                     android:text="Username"
                     android:textColor="@color/white"
-                    android:textSize="30dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="30sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="10sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="2sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
